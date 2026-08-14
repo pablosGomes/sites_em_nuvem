@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BATMAN ARKHAM KNIGHT </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="apolo.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="grain"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  <header class="nav" id="siteNav">
+    <div class="nav-inner">
+      <a href="#top" class="brand">
+        <svg viewBox="0 0 100 60">
+          <path
+            d="M50 0 C46 8 40 6 35 2 C38 10 30 12 22 8 C28 16 18 20 8 16 C18 26 8 30 0 26 C14 34 10 44 4 50 C20 46 24 54 22 60 C30 52 38 56 40 60 C42 54 46 52 50 52 C54 52 58 54 60 60 C62 56 70 52 78 60 C76 54 80 46 96 50 C90 44 86 34 100 26 C92 30 82 26 92 16 C82 20 72 16 78 8 C70 12 62 10 65 2 C60 6 54 8 50 0 Z" />
+        </svg>
+        <span class="brand-text">ARKHAM <b>KNIGHT</b></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#top">Início</a></li>
+        <li><a href="#sobre">Sobre o jogo</a></li>
+        <li><a href="#personagens">Personagens</a></li>
+        <li><a href="#batmovel">Batmóvel</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+      </ul>
+      <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#top">Início</a>
+    <a href="#sobre">Sobre o jogo</a>
+    <a href="#personagens">Personagens</a>
+    <a href="#batmovel">Batmóvel</a>
+    <a href="#galeria">Galeria</a>
+  </nav>
+  <section class="hero" id="top">
+    <canvas id="rain"></canvas>
+    <div class="spotlight"></div>
+
+    <svg class="hero-skyline" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMax slice"
+      xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skyfade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0d1016" />
+          <stop offset="1" stop-color="#05060a" />
+        </linearGradient>
+      </defs>
+      <rect width="1440" height="800" fill="url(#skyfade)" />
+      <g fill="#0f131a">
+        <rect x="0" y="520" width="90" height="280" />
+        <rect x="100" y="460" width="60" height="340" />
+        <rect x="175" y="560" width="120" height="240" />
+        <rect x="310" y="380" width="70" height="420" />
+        <rect x="395" y="500" width="100" height="300" />
+        <rect x="510" y="300" width="60" height="500" />
+        <rect x="590" y="440" width="140" height="360" />
+        <rect x="750" y="360" width="80" height="440" />
+        <rect x="850" y="480" width="110" height="320" />
+        <rect x="980" y="260" width="70" height="540" />
+        <rect x="1070" y="420" width="130" height="380" />
+        <rect x="1220" y="500" width="90" height="300" />
+        <rect x="1330" y="380" width="110" height="420" />
+      </g>
+      <g fill="#161c25" opacity=".8">
+        <rect x="40" y="600" width="50" height="200" />
+        <rect x="230" y="620" width="60" height="180" />
+        <rect x="460" y="560" width="55" height="240" />
+        <rect x="660" y="600" width="70" height="200" />
+        <rect x="900" y="580" width="60" height="220" />
+        <rect x="1150" y="600" width="65" height="200" />
+        <rect x="1300" y="580" width="60" height="220" />
+      </g>
+      <g fill="#f0c33c" opacity=".35">
+        <rect x="330" y="410" width="6" height="8" />
+        <rect x="345" y="430" width="6" height="8" />
+        <rect x="605" y="470" width="6" height="8" />
+        <rect x="625" y="500" width="6" height="8" />
+        <rect x="770" y="400" width="6" height="8" />
+        <rect x="1000" y="300" width="6" height="8" />
+        <rect x="1090" y="460" width="6" height="8" />
+        <rect x="1350" y="420" width="6" height="8" />
+      </g>
+    </svg>
+
+    <svg class="hero-bat" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" fill="#c81e2c">
+      <path
+        d="M50 0 C46 8 40 6 35 2 C38 10 30 12 22 8 C28 16 18 20 8 16 C18 26 8 30 0 26 C14 34 10 44 4 50 C20 46 24 54 22 60 C30 52 38 56 40 60 C42 54 46 52 50 52 C54 52 58 54 60 60 C62 56 70 52 78 60 C76 54 80 46 96 50 C90 44 86 34 100 26 C92 30 82 26 92 16 C82 20 72 16 78 8 C70 12 62 10 65 2 C60 6 54 8 50 0 Z" />
+    </svg>
+
+    <div class="hero-content">
+      <div>
+        <p class="eyebrow reveal-up">Rocksteady Studios apresenta</p>
+        <h1 class="reveal-up">BATMAN<br><span class="accent">ARKHAM KNIGHT</span></h1>
+        <p class="tagline reveal-up" >"Gotham precisa de um herói. Não de mais um cadáver."</p>
+        <div class="hero-ctas reveal-up">
+        </div>
+      </div>
+
+      <div class="hud-ticker reveal-up">
+        <div class="ht-head"><span>GOTHAM // STATUS</span><span class="ht-dot"></span></div>
+        <div class="ht-row"><span>Índice de criminalidade</span><span id="tk-crime">87%</span></div>
+        <div class="ht-row"><span>Patrulha ativa</span><span id="tk-patrol">BATMAN</span></div>
+        <div class="ht-row"><span>Condição climática</span><span id="tk-weather">TEMPESTADE</span></div>
+        <div class="ht-row"><span>Alerta Arkham Knight</span><span id="tk-alert">CRÍTICO</span></div>
+      </div>
+    </div>
+
+    <div class="scroll-cue"><span>ROLAR</span><span class="line"></span></div>
+  </section>
+  <section id="sobre">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-copy sr">
+          <p class="eyebrow">Sobre o jogo</p>
+          <h2 style="margin:.8rem 0 1.6rem;font-size:clamp(2rem,4vw,3rem);">O capítulo final da lenda</h2>
+          <p>Um ano após os eventos de <b>Arkham City</b>, Gotham enfrenta sua noite mais sombria. O <b>Espantalho</b>
+            retorna com uma ameaça que força a evacuação da cidade — e um novo inimigo mascarado, o <b>Arkham
+              Knight</b>, comanda um exército privado com um único objetivo: destruir o Cavaleiro das Trevas.</p>
+          <p>Explore <b>Gotham City inteira</b> em mundo aberto, pela primeira vez com o <b>Batmóvel</b> totalmente
+            integrado ao combate, à perseguição e à investigação — em uma experiência de ação e aventura sem precedentes
+            na franquia Arkham.</p>
+
+          <div class="info-cards">
+            <div class="info-card hud-frame">
+              <div class="lbl">Desenvolvedora</div>
+              <div class="val">Rocksteady Studios</div>
+            </div>
+            <div class="info-card hud-frame">
+              <div class="lbl">Editora</div>
+              <div class="val">Warner Bros. Interactive</div>
+            </div>
+            <div class="info-card hud-frame">
+              <div class="lbl">Gênero</div>
+              <div class="val">Ação / Aventura</div>
+            </div>
+            <div class="info-card hud-frame">
+              <div class="lbl">Ambientação</div>
+              <div class="val">Gotham City</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-visual sr">
+          <svg class="bat-mark" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" fill="#1c2129">
+            <path
+              d="M50 0 C46 8 40 6 35 2 C38 10 30 12 22 8 C28 16 18 20 8 16 C18 26 8 30 0 26 C14 34 10 44 4 50 C20 46 24 54 22 60 C30 52 38 56 40 60 C42 54 46 52 50 52 C54 52 58 54 60 60 C62 56 70 52 78 60 C76 54 80 46 96 50 C90 44 86 34 100 26 C92 30 82 26 92 16 C82 20 72 16 78 8 C70 12 62 10 65 2 C60 6 54 8 50 0 Z" />
+          </svg>
+          <span class="hud-corner hc-tl">CASE FILE // 001<br>SUBJECT: BATMAN</span>
+          <span class="hud-corner hc-br">GOTHAM PD<br>CLASSIFIED</span>
+          <div class="rim"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="divider"></div>
+  </div>
+
+  <section id="personagens">
+    <div class="wrap">
+      <div class="section-head sr">
+        <p class="eyebrow">Dossiê Gotham PD</p>
+        <h2>Personagens</h2>
+        <p>Aliados e inimigos que definem o destino de Gotham nesta noite final.</p>
+      </div>
+
+      <div class="char-grid" id="charGrid"></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="divider"></div>
+  </div>
+  <section id="batmovel">
+    <div class="wrap">
+      <div class="section-head sr">
+        <p class="eyebrow">Tecnologia Wayne</p>
+        <h2>O Batmóvel</h2>
+        <p>Blindado, armado e inteligente — o Batmóvel se transforma entre o Modo Perseguição e o Modo Combate em
+          segundos.</p>
+      </div>
+
+      <div class="moto hud-frame sr">
+        <div class="moto-grid">
+          <div class="moto-visual">
+            <div class="moto-silhouette">
+              <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="200" cy="190" rx="170" ry="10" fill="rgba(200,30,44,.12)" />
+                <path
+                  d="M20 150 L60 100 L110 80 L180 60 L260 60 L320 90 L370 120 L380 150 L360 165 L330 150 L300 165 L120 165 L90 150 L60 165 L30 165 Z"
+                  fill="#12151b" stroke="#c81e2c" stroke-width="1.5" />
+                <circle cx="90" cy="165" r="22" fill="#0a0b0d" stroke="#f0c33c" stroke-width="1.5" />
+                <circle cx="320" cy="165" r="22" fill="#0a0b0d" stroke="#f0c33c" stroke-width="1.5" />
+                <rect x="150" y="70" width="90" height="20" fill="#1a1f27" stroke="#c81e2c" stroke-width="1" />
+              </svg>
+            </div>
+            <div class="moto-hud-line l1"></div>
+            <div class="moto-hud-line l2"></div>
+            <div class="moto-reticle r1"></div>
+            <div class="moto-reticle r2"></div>
+          </div>
+
+          <div class="moto-copy">
+            <p style="color:var(--fog);line-height:1.75;">Equipado com um canhão de 60mm, sistema de ejeção do piloto e
+              IA de combate autônomo, o Batmóvel é tanto arma quanto veículo — capaz de atravessar Gotham em segundos ou
+              enfrentar um batalhão blindado sozinho.</p>
+
+            <div class="moto-stats">
+              <div class="moto-stat">
+                <div class="lbl">Velocidade máxima</div>
+                <div class="bar"><i style="--w:92%"></i></div>
+              </div>
+              <div class="moto-stat">
+                <div class="lbl">Modo perseguição</div>
+                <div class="bar"><i style="--w:88%"></i></div>
+              </div>
+              <div class="moto-stat">
+                <div class="lbl">Modo combate</div>
+                <div class="bar"><i style="--w:95%"></i></div>
+              </div>
+              <div class="moto-stat">
+                <div class="lbl">Blindagem / tecnologia</div>
+                <div class="bar"><i style="--w:97%"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="gotham">
+    <svg class="gotham-skyline" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMax slice"
+      xmlns="http://www.w3.org/2000/svg">
+      <rect width="1440" height="700" fill="#05060a" />
+      <g fill="#0c0f15">
+        <rect x="0" y="420" width="110" height="280" />
+        <rect x="130" y="360" width="80" height="340" />
+        <rect x="230" y="460" width="140" height="240" />
+        <rect x="400" y="260" width="90" height="440" />
+        <rect x="510" y="400" width="120" height="300" />
+        <rect x="660" y="180" width="80" height="520" />
+        <rect x="760" y="380" width="160" height="320" />
+        <rect x="950" y="300" width="100" height="400" />
+        <rect x="1080" y="440" width="130" height="260" />
+        <rect x="1240" y="240" width="90" height="460" />
+        <rect x="1350" y="400" width="90" height="300" />
+      </g>
+      <g fill="#f0c33c" opacity=".3">
+        <rect x="420" y="300" width="8" height="10" />
+        <rect x="440" y="330" width="8" height="10" />
+        <rect x="680" y="220" width="8" height="10" />
+        <rect x="700" y="260" width="8" height="10" />
+        <rect x="780" y="420" width="8" height="10" />
+        <rect x="970" y="340" width="8" height="10" />
+        <rect x="1260" y="280" width="8" height="10" />
+      </g>
+    </svg>
+    <div class="gotham-fog"></div>
+    <div class="lightning" id="lightning"></div>
+    <div class="gotham-quote sr">
+      <h2>Esta cidade<br>precisa do Batman.</h2>
+      <div class="sub">Gotham City // Uma noite. Nenhuma saída.</div>
+    </div>
+  </section>
+  <section id="galeria">
+    <div class="wrap">
+      <div class="section-head sr">
+        <p class="eyebrow">Arquivo visual</p>
+        <h2>Galeria</h2>
+        <p>Momentos capturados nas ruas de Gotham.</p>
+      </div>
+
+      <div class="gal-grid sr" id="galGrid"></div>
+    </div>
+  </section>
+
+  <div class="modal" id="modal">
+    <div class="modal-panel" id="modalPanel">
+      <span class="modal-close" id="modalClose">FECHAR ✕</span>
+      <div class="modal-caption" id="modalCaption"></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <svg viewBox="0 0 100 60">
+            <path
+              d="M50 0 C46 8 40 6 35 2 C38 10 30 12 22 8 C28 16 18 20 8 16 C18 26 8 30 0 26 C14 34 10 44 4 50 C20 46 24 54 22 60 C30 52 38 56 40 60 C42 54 46 52 50 52 C54 52 58 54 60 60 C62 56 70 52 78 60 C76 54 80 46 96 50 C90 44 86 34 100 26 C92 30 82 26 92 16 C82 20 72 16 78 8 C70 12 62 10 65 2 C60 6 54 8 50 0 Z" />
+          </svg>
+          <span>BATMAN: ARKHAM KNIGHT</span>
+        </div>
+        <ul class="foot-links">
+          <li><a href="#top">Início</a></li>
+          <li><a href="#sobre">Sobre o jogo</a></li>
+          <li><a href="#personagens">Personagens</a></li>
+          <li><a href="#batmovel">Batmóvel</a></li>
+          <li><a href="#galeria">Galeria</a></li>
+        </ul>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Apolo Games. Página conceitual criada para trabalho escolar.</span>
+        <span>Apolo's studios</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="apolo.js"></script>
+</body>
+
+</html>
