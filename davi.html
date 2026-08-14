@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUBNAUTICA 2</title>
+  
+  <!-- Fontes Oficiais Sci-Fi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="davi.css">
+</head>
+<body data-theme="night">
+
+  <!-- HUD Superior de Telemetria do Traje -->
+  <aside class="top-telemetry-hud">
+    <div class="telemetry-item"><span class="hud-label">PROFUNDIDADE:</span> <strong id="hud-depth-val">0 m</strong></div>
+    <div class="telemetry-item"><span class="hud-label">OXIGÊNIO:</span> <strong id="hud-o2-val" class="neon-cyan">100%</strong></div>
+    <div class="telemetry-item"><span class="hud-label">ILUMINAÇÃO:</span> <strong id="hud-time-val" class="neon-gold">DIA (12:00)</strong></div>
+    <div class="telemetry-item"><span class="hud-label">BIOMA:</span> <strong id="hud-biome-val" class="neon-green">SAFE SHALLOWS</strong></div>
+    <div class="telemetry-item alert-aurora"><span class="pulse-warning">⚠</span> <span>AURORA: <strong>1.247 m</strong></span></div>
+  </aside>
+
+  <!-- Barra de Navegação Superior (Padrão Oficial Krafton / Alterra) -->
+  <header class="main-header">
+    <div class="header-left">
+      <div class="krafton-logo">KRAFTON <span class="arrow-down">▾</span></div>
+      <button class="btn-nav-pill" id="btn-menu">
+        <span class="icon-burger">☰</span> MENU ▾
+      </button>
+    </div>
+
+    <!-- Notch Central Oficial com Logo Subnautica 2 -->
+    <div class="center-notch">
+      <div class="notch-content">
+        <h1 class="logo-subnautica-2">SUBNAUTICA <span class="num-two">2</span></h1>
+        <div class="badge-early-access">E A R L Y &nbsp; A C C E S S</div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="lang-selector">
+        <span class="globe-icon">🌐</span> PORTUGUÊS (BRAZIL) ▾
+      </div>
+      <button class="btn-play-now" id="btn-hero-play">
+        JOGUE AGORA
+      </button>
+      <button class="btn-sound-toggle" id="btn-sound-toggle" title="Sonar & Voz da IA Alterra [J]">
+        <span id="sound-indicator">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Showcase Panorâmico Oficial (Cards Lado a Lado) -->
+  <main class="showcase-viewport">
+    <div class="hud-outer-frame">
+      <div class="dual-game-container">
+        
+        <!-- CARD 1: SUBNAUTICA ORIGINAL -->
+        <article class="game-column-card card-original">
+          <div class="card-image-box">
+            <img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=800&auto=format&fit=crop" alt="Subnautica" class="game-art" onerror="this.src='subnautica-hero.png'">
+            <div class="game-logo-overlay">
+              <h2 class="game-title">SUBNAUTICA</h2>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <p class="game-synopsis">
+              Mergulhe nas profundezas de um mundo oceânico alienígena repleto de maravilhas e perigos. Crie equipamentos, pilote submarinos e supere os perigos da fauna selvagem para explorar recifes de corais, vulcões, sistemas de cavernas e muito mais — tudo isso enquanto luta para sobreviver.
+            </p>
+
+            <div class="buy-section">
+              <h4 class="buy-label">COMPRE AGORA</h4>
+              <div class="platform-grid">
+                <a href="https://store.steampowered.com/app/264710/Subnautica/" target="_blank" class="platform-btn"><span>🎮</span> STEAM</a>
+                <a href="https://store.epicgames.com/pt-BR/p/subnautica" target="_blank" class="platform-btn"><span>⚡</span> EPIC GAMES</a>
+                <a href="#" class="platform-btn"><span>🟢</span> XBOX</a>
+                <a href="#" class="platform-btn"><span>🔵</span> PLAYSTATION</a>
+                <a href="#" class="platform-btn btn-switch"><span>🔴</span> SWITCH</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 2: SUBNAUTICA BELOW ZERO -->
+        <article class="game-column-card card-below-zero">
+          <div class="card-image-box">
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop" alt="Subnautica Below Zero" class="game-art">
+            <div class="game-logo-overlay">
+              <h2 class="game-title below-zero">SUBNAUTICA <br><span>BELOW ZERO</span></h2>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <p class="game-synopsis">
+              Dois anos após os eventos do Subnautica original, Below Zero leva você de volta ao Planeta 4546B para descobrir a verdade por trás de uma conspiração mortal. Sobreviva aos mares gelados construindo habitats, desenvolvendo ferramentas e mergulhando de cabeça no mundo profundo de Subnautica.
+            </p>
+
+            <div class="buy-section">
+              <h4 class="buy-label">COMPRE AGORA</h4>
+              <div class="platform-grid">
+                <a href="https://store.steampowered.com/app/848450/Subnautica_Below_Zero/" target="_blank" class="platform-btn"><span>🎮</span> STEAM</a>
+                <a href="#" class="platform-btn"><span>⚡</span> EPIC GAMES</a>
+                <a href="#" class="platform-btn"><span>🟢</span> XBOX</a>
+                <a href="#" class="platform-btn"><span>🔵</span> PLAYSTATION</a>
+                <a href="#" class="platform-btn btn-switch"><span>🔴</span> SWITCH</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Seção de Ações & Trailer -->
+  <section class="trailer-action-banner">
+    <div class="banner-inner">
+      <div class="banner-text">
+        <span class="badge-holo">CINEMÁTICA OFICIAL</span>
+        <h2>Explore as Profundezas em Alta Definição</h2>
+        <p>Assista ao trailer oficial e veja os novos biomas e predadores de 4546B.</p>
+      </div>
+      <button id="btn-watch-trailer" class="btn-trailer">
+        <span class="play-icon">▶</span> ASSISTIR TRAILER OFICIAL
+      </button>
+    </div>
+  </section>
+
+  <!-- Simulador de Mergulho 2D com Ciclo Dia/Noite e IA Alterra -->
+  <section id="simulador-section" class="interactive-simulator-area">
+    <div class="hud-panel-title">
+      <span class="tech-badge">SIMULADOR TÁTICO ALTERRA 4546B</span>
+      <h2>Mergulho, Coleta & Ciclo Solar</h2>
+      <p>Gerencie seu oxigênio, colete recursos com [E], fuja do Leviatã e escute os avisos de voz da IA do PDA.</p>
+    </div>
+
+    <div class="simulator-box">
+      <div class="sim-hud-bar">
+        <div class="sim-gauge">
+          <span>OXIGÊNIO (O₂): <strong id="hud-o2">100%</strong></span>
+          <div class="gauge-bar"><div id="hud-o2-bar" class="gauge-fill o2"></div></div>
+        </div>
+        <div class="sim-gauge">
+          <span>INTEGRIDADE / VIDA: <strong id="hud-hp">100%</strong></span>
+          <div class="gauge-bar"><div id="hud-hp-fill" class="gauge-fill hp"></div></div>
+        </div>
+        <div class="sim-inventory">
+          <span>🔩 Titânio: <strong id="inv-tit">0</strong></span>
+          <span>💎 Quartzo: <strong id="inv-qua">0</strong></span>
+          <span>🐟 Peepers: <strong id="inv-peep">0</strong></span>
+        </div>
+        <button class="btn-pda-action trigger-pda">ABRIR PDA [TAB]</button>
+      </div>
+
+      <canvas id="oceanCanvas" width="1050" height="480"></canvas>
+
+      <div class="sim-instructions">
+        <span>🎮 <strong>Controles:</strong> [W,A,S,D] / [Setas] = Nadar | [E] = Coletar | [Espaço] = Subir à Tona | [J] = Sonar/Voz | [TAB] = PDA</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galeria de Capturas de Tela / Biomas -->
+  <section class="gallery-section">
+    <div class="hud-panel-title">
+      <span class="tech-badge">REGISTROS FOTOGRÁFICOS</span>
+      <h2>Galeria dos Biomas de 4546B</h2>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item" data-full="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=1200&auto=format&fit=crop" data-title="Safe Shallows - Recifes Rasos">
+        <img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=400&auto=format&fit=crop" alt="Safe Shallows">
+        <div class="gallery-caption">Safe Shallows (0 - 80m)</div>
+      </div>
+      <div class="gallery-item" data-full="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200&auto=format&fit=crop" data-title="Kelp Forest - Floresta de Algas">
+        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=400&auto=format&fit=crop" alt="Kelp Forest">
+        <div class="gallery-caption">Kelp Forest (0 - 160m)</div>
+      </div>
+      <div class="gallery-item" data-full="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop" data-title="Glacial Basin - Mares Congelados">
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop" alt="Glacial Basin">
+        <div class="gallery-caption">Glacial Basin (Below Zero)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simulador Arquiteto de Bases -->
+  <section class="base-architect-section">
+    <div class="hud-panel-title">
+      <span class="tech-badge">SISTEMA HABITAT ALTERRA</span>
+      <h2>Calculador de Integridade do Casco</h2>
+    </div>
+
+    <div class="base-builder-card">
+      <div class="builder-controls">
+        <div class="module-counter">
+          <span>Sala Multifuncional (-1.2 Int / +5 E):</span>
+          <div class="btn-step">
+            <button class="btn-mod" onclick="alterModule('room', -1)">-</button>
+            <strong id="count-room">1</strong>
+            <button class="btn-mod" onclick="alterModule('room', 1)">+</button>
+          </div>
+        </div>
+        <div class="module-counter">
+          <span>Janela de Vidro Enamelado (-1.0 Int):</span>
+          <div class="btn-step">
+            <button class="btn-mod" onclick="alterModule('window', -1)">-</button>
+            <strong id="count-window">2</strong>
+            <button class="btn-mod" onclick="alterModule('window', 1)">+</button>
+          </div>
+        </div>
+        <div class="module-counter">
+          <span>Placa de Reforço de Titânio (+7.0 Int):</span>
+          <div class="btn-step">
+            <button class="btn-mod" onclick="alterModule('reinforce', -1)">-</button>
+            <strong id="count-reinforce">1</strong>
+            <button class="btn-mod" onclick="alterModule('reinforce', 1)">+</button>
+          </div>
+        </div>
+        <div class="module-counter">
+          <span>Biorreator / Painel (+50 Energia):</span>
+          <div class="btn-step">
+            <button class="btn-mod" onclick="alterModule('power', -1)">-</button>
+            <strong id="count-power">2</strong>
+            <button class="btn-mod" onclick="alterModule('power', 1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="builder-status-panel">
+        <div class="status-box">
+          <label>INTEGRIDADE ESTRUTURAL</label>
+          <h2 id="base-integrity" class="neon-green">14.8</h2>
+          <small id="base-status-msg">Casco Estável // Sem Risco de Inundação</small>
+        </div>
+        <div class="status-box">
+          <label>ENERGIA TOTAL</label>
+          <h2 id="base-energy" class="neon-cyan">100 / 100</h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal do Trailer Oficial -->
+  <div id="trailer-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-window trailer-window">
+      <div class="modal-header">
+        <span>SUBNAUTICA // TRANSMISSÃO OFICIAL</span>
+        <button id="btn-close-trailer" class="modal-close-btn">✕</button>
+      </div>
+      <div class="video-container">
+        <iframe id="trailer-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Lightbox de Imagens -->
+  <div id="lightbox-modal" class="modal-overlay" aria-hidden="true">
+    <div class="lightbox-box">
+      <button id="btn-close-lightbox" class="modal-close-btn">✕</button>
+      <img id="lightbox-img" src="" alt="Ampliação do Bioma">
+      <div id="lightbox-caption" class="lightbox-title"></div>
+    </div>
+  </div>
+
+  <!-- Modal PDA Alterra Holográfico -->
+  <div id="pda-modal" class="pda-modal-overlay" aria-hidden="true">
+    <div class="pda-device">
+      <div class="pda-header">
+        <div class="pda-brand">ALTERRA CORP // PDA OS v5.5 [SAVE ATIVO]</div>
+        <button id="btn-close-pda" class="pda-close">✕ FECHAR [ESC]</button>
+      </div>
+
+      <div class="pda-tabs">
+        <button class="pda-tab-btn active" data-tab="tab-craft">FABRICADOR MOLECULAR</button>
+        <button class="pda-tab-btn" data-tab="tab-inv">INVENTÁRIO DO TRAJE</button>
+        <button class="pda-tab-btn" data-tab="tab-logs">LOGS DA AURORA</button>
+        <button class="pda-tab-btn" data-tab="tab-settings">CONFIGURAÇÕES</button>
+      </div>
+
+      <div class="pda-body">
+        <!-- Aba 1: Fabricador -->
+        <div id="tab-craft" class="pda-pane active">
+          <div class="craft-grid">
+            <div class="craft-item">
+              <div>
+                <strong>Tanque de Oxigênio Expandido</strong>
+                <small>Custo: 2x Titânio (+50 O₂)</small>
+              </div>
+              <button class="btn-craft" data-item="tank">FORJAR</button>
+            </div>
+            <div class="craft-item">
+              <div>
+                <strong>Faca de Sobrevivência</strong>
+                <small>Custo: 1x Titânio, 1x Quartzo</small>
+              </div>
+              <button class="btn-craft" data-item="knife">FORJAR</button>
+            </div>
+            <div class="craft-item">
+              <div>
+                <strong>Seaglide (Propulsor)</strong>
+                <small>Custo: 3x Titânio, 2x Quartzo (+55% Vel)</small>
+              </div>
+              <button class="btn-craft" data-item="seaglide">FORJAR</button>
+            </div>
+            <div class="craft-item">
+              <div>
+                <strong>Peeper Cozido Nutritivo</strong>
+                <small>Custo: 1x Peeper (+40 Vida)</small>
+              </div>
+              <button class="btn-craft" data-item="food">PREPARAR</button>
+            </div>
+          </div>
+          <div id="craft-status" class="craft-status-msg"></div>
+        </div>
+
+        <!-- Aba 2: Inventário -->
+        <div id="tab-inv" class="pda-pane">
+          <div class="pda-inventory-grid">
+            <div class="pda-slot">🔩 Titânio: <strong id="pda-val-tit">0</strong></div>
+            <div class="pda-slot">💎 Quartzo: <strong id="pda-val-qua">0</strong></div>
+            <div class="pda-slot">🐟 Peepers: <strong id="pda-val-peep">0</strong></div>
+            <div class="pda-slot">🤿 Tanque O₂ Reserva: <strong id="pda-val-tank">0</strong></div>
+            <div class="pda-slot">🔪 Faca: <strong id="pda-val-knife">Não</strong></div>
+            <div class="pda-slot">⚡ Seaglide: <strong id="pda-val-seaglide">Não</strong></div>
+          </div>
+        </div>
+
+        <!-- Aba 3: Logs -->
+        <div id="tab-logs" class="pda-pane">
+          <div class="log-entry">
+            <span class="log-title">[TRANSMISSÃO DE SOCORRO // CÁPSULA 05]</span>
+            <p>"Aqui é o sobrevivente da cápsula 5. Consegui pousar nos recifes rasos. O fabricador está operacional, mas o sistema de propulsão da Aurora entrou em colapso crítico."</p>
+          </div>
+        </div>
+
+        <!-- Aba 4: Configurações & Reset -->
+        <div id="tab-settings" class="pda-pane">
+          <h4>Gerenciador de Dados Alterra</h4>
+          <p>O jogo salva automaticamente seu inventário e construções no navegador.</p>
+          <button id="btn-reset-save" class="btn-reset-data">⚠ APAGAR DADOS E REINICIAR SAVE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão Flutuante de Topo -->
+  <button id="btn-scroll-top" class="floating-scroll-top" title="Voltar ao Topo">▲</button>
+
+  <!-- Rodapé Oficial -->
+  <footer class="official-footer">
+    <div class="footer-logos">
+      <span class="subnautica-footer-logo">SUBNAUTICA 2</span>
+      <span class="unknown-worlds-logo">UNKNOWN WORLDS</span>
+    </div>
+    <p class="footer-legal">
+      © 2026 Unknown Worlds Entertainment & KRAFTON, Inc. Subnautica e Subnautica Below Zero são marcas registradas.
+    </p>
+  </footer>
+
+  <script src="davi.js"></script>
+</body>
+</html>
