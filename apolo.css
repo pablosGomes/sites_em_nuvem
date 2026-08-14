@@ -534,3 +534,71 @@ footer{
   .moto-stats{grid-template-columns:1fr;}
   .hero h1{font-size:clamp(2.6rem,13vw,4rem);}
 }
+
+/* ==========================================================
+   IMAGENS DO JOGO
+   As artes entram por baixo das camadas que já existiam (chuva,
+   holofote, degradês), então a atmosfera montada continua valendo.
+   ========================================================== */
+
+/* Arte oficial ao fundo do hero, atrás da silhueta de prédios */
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  width:100%;height:100%;
+  object-fit:cover;object-position:50% 32%;
+  opacity:.5;
+  filter:grayscale(.35) contrast(1.1) brightness(.72);
+}
+/* Escurece a base para o texto do hero continuar legível sobre a foto */
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:
+    linear-gradient(180deg, rgba(5,6,10,.75) 0%, transparent 28%),
+    linear-gradient(0deg, #05060a 4%, rgba(5,6,10,.72) 34%, transparent 72%);
+}
+/* A silhueta vetorial vira camada da frente, criando profundidade */
+.hero-skyline{opacity:.72;}
+
+/* Retratos dos personagens */
+.char-portrait img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;object-position:50% 18%;
+  filter:grayscale(.28) contrast(1.08) brightness(.86);
+  transition:filter .6s var(--ease);
+}
+.char-card:hover .char-portrait img{filter:grayscale(0) contrast(1.12) brightness(1);}
+
+/* Galeria */
+.gal-item img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:grayscale(.22) contrast(1.06) brightness(.88);
+  transition:filter .5s var(--ease), transform .6s var(--ease);
+}
+.gal-item:hover img{filter:grayscale(0) contrast(1.1) brightness(1);transform:scale(1.04);}
+
+/* Imagem ampliada no modal */
+.modal-panel img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.modal-panel{background:#05060a;}
+/* Fundo próprio na legenda: ela fica por cima da foto e precisa de contraste */
+.modal-caption{
+  background:rgba(0,0,0,.55);padding:.4rem .7rem;backdrop-filter:blur(4px);
+}
+
+/* Pôster oficial na seção "sobre".
+   No mobile o bloco vira 16/9 e o pôster é vertical: sem ancorar o
+   enquadramento, o corte cairia bem em cima do logo. */
+.about-visual img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;object-position:50% 26%;
+  filter:contrast(1.05) brightness(.92);
+}
+/* Com o pôster no lugar, o morcego vetorial vira só uma marca-d'água */
+.about-visual .bat-mark{opacity:.12;mix-blend-mode:overlay;}

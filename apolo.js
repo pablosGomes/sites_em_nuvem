@@ -83,24 +83,31 @@
     }
     setTimeout(flash, 2500);
 
+    // Retratos oficiais dos personagens, todos na versão de Arkham Knight.
+    // O parâmetro final reduz a largura no próprio CDN, evitando baixar
+    // arquivos de 2000px para cards que aparecem com pouco mais de 300px.
+    const wiki = (path) =>
+      `https://static.wikia.nocookie.net/arkhamcity/images/${path}/revision/latest/scale-to-width-down/520`;
+
     const characters = [
-      { name: 'Batman', role: 'Protagonista', desc: 'O Cavaleiro das Trevas, decidido a enfrentar sua ameaça mais pessoal.', c1: '#1c2733', c2: '#0a0b0d' },
-      { name: 'Jim Gordon', role: 'Comissário GPD', desc: 'O único policial em quem Batman confia plenamente em Gotham.', c1: '#232b36', c2: '#101319' },
-      { name: 'Oracle', role: 'Suporte tático', desc: 'Barbara Gordon coordena a rede de inteligência de Batman à distância.', c1: '#161b23', c2: '#2e3846' },
-      { name: 'Nightwing', role: 'Aliado', desc: 'Ex-parceiro de Batman, ágil e independente, sempre pronto para lutar.', c1: '#1a2430', c2: '#0d1116' },
-      { name: 'Catwoman', role: 'Aliada / Ameaça', desc: 'Selina Kyle joga em seu próprio jogo — nem sempre do lado do Batman.', c1: '#2a2430', c2: '#0e0c11' },
-      { name: 'Robin', role: 'Aliado', desc: 'Tim Drake, o parceiro mais recente, ágil no combate com bastão.', c1: '#1c2b26', c2: '#0a1210' },
-      { name: 'Harley Quinn', role: 'Vilã', desc: 'Imprevisível e perigosa, busca vingança pela morte do Coringa.', c1: '#301b28', c2: '#120a10' },
-      { name: 'Scarecrow', role: 'Vilão principal', desc: 'O Mestre do Medo retorna para espalhar o caos por toda Gotham.', c1: '#2b2417', c2: '#0f0c07' },
-      { name: 'Arkham Knight', role: 'Antagonista', desc: 'Um inimigo mascarado que comanda um exército só para destruir Batman.', c1: '#2c1418', c2: '#0e0708' },
-      { name: 'Poison Ivy', role: 'Vilã', desc: 'Controla a natureza de Gotham para seus próprios e obscuros fins.', c1: '#16281c', c2: '#08110b' },
+      { name: 'Batman', role: 'Protagonista', desc: 'O Cavaleiro das Trevas, decidido a enfrentar sua ameaça mais pessoal.', c1: '#1c2733', c2: '#0a0b0d', img: wiki('c/ce/BAKBatmanProfilePic.jpg') },
+      { name: 'Jim Gordon', role: 'Comissário GPD', desc: 'O único policial em quem Batman confia plenamente em Gotham.', c1: '#232b36', c2: '#101319', img: wiki('c/c2/Gordon_knight.png') },
+      { name: 'Oracle', role: 'Suporte tático', desc: 'Barbara Gordon coordena a rede de inteligência de Batman à distância.', c1: '#161b23', c2: '#2e3846', img: wiki('5/53/Oracle_%28Arkham_Knight%29.jpg') },
+      { name: 'Nightwing', role: 'Aliado', desc: 'Ex-parceiro de Batman, ágil e independente, sempre pronto para lutar.', c1: '#1a2430', c2: '#0d1116', img: wiki('4/46/Nightwing_profile.jpg') },
+      { name: 'Catwoman', role: 'Aliada / Ameaça', desc: 'Selina Kyle joga em seu próprio jogo — nem sempre do lado do Batman.', c1: '#2a2430', c2: '#0e0c11', img: wiki('d/d1/Arkham_Knight_Catwoman_profile.jpg') },
+      { name: 'Robin', role: 'Aliado', desc: 'Tim Drake, o parceiro mais recente, ágil no combate com bastão.', c1: '#1c2b26', c2: '#0a1210', img: wiki('3/37/Robin_AK.webp') },
+      { name: 'Harley Quinn', role: 'Vilã', desc: 'Imprevisível e perigosa, busca vingança pela morte do Coringa.', c1: '#301b28', c2: '#120a10', img: wiki('0/03/HarleyQuinn_Arkham_Knight.jpg') },
+      { name: 'Scarecrow', role: 'Vilão principal', desc: 'O Mestre do Medo retorna para espalhar o caos por toda Gotham.', c1: '#2b2417', c2: '#0f0c07', img: wiki('f/fd/BAKScarecrow.jpg') },
+      { name: 'Arkham Knight', role: 'Antagonista', desc: 'Um inimigo mascarado que comanda um exército só para destruir Batman.', c1: '#2c1418', c2: '#0e0708', img: wiki('a/aa/ArkhamKnight.jpg') },
+      { name: 'Poison Ivy', role: 'Vilã', desc: 'Controla a natureza de Gotham para seus próprios e obscuros fins.', c1: '#16281c', c2: '#08110b', img: wiki('9/97/Poison_Ivy_showcase.jpg') },
     ];
 
     const charGrid = document.getElementById('charGrid');
     charGrid.innerHTML = characters.map(c => `
   <article class="char-card sr" style="--c1:${c.c1};--c2:${c.c2}">
-    <div class="char-portrait"></div>
-    <div class="char-mono">${c.name.charAt(0)}</div>
+    <div class="char-portrait">
+      <img src="${c.img}" alt="${c.name} em Batman: Arkham Knight" loading="lazy">
+    </div>
     <div class="char-info">
       <div class="role">${c.role}</div>
       <h3>${c.name}</h3>
@@ -111,33 +118,36 @@
     charGrid.querySelectorAll('.sr').forEach(el => io.observe(el));
 
 
-    const galleryIconBat = `<svg viewBox="0 0 100 60" fill="#fff"><path d="M50 0 C46 8 40 6 35 2 C38 10 30 12 22 8 C28 16 18 20 8 16 C18 26 8 30 0 26 C14 34 10 44 4 50 C20 46 24 54 22 60 C30 52 38 56 40 60 C42 54 46 52 50 52 C54 52 58 54 60 60 C62 56 70 52 78 60 C76 54 80 46 96 50 C90 44 86 34 100 26 C92 30 82 26 92 16 C82 20 72 16 78 8 C70 12 62 10 65 2 C60 6 54 8 50 0 Z"/></svg>`;
+    // Capturas oficiais do jogo, servidas pelo CDN da Steam
+    const shot = (hash) =>
+      `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/208650/ss_${hash}.1920x1080.jpg`;
 
     const gallery = [
-      { tag: 'Batman', c1: '#1c2733', c2: '#080a0c' },
-      { tag: 'Batmóvel', c1: '#232b36', c2: '#0c1016' },
-      { tag: 'Gotham City', c1: '#161c25', c2: '#05060a' },
-      { tag: 'Vilões', c1: '#2b1720', c2: '#0d0709' },
-      { tag: 'Combate', c1: '#2a1c14', c2: '#0d0805' },
-      { tag: 'Bat-sinal', c1: '#1e2430', c2: '#08090c' },
+      { tag: 'Batman', desc: 'O Cavaleiro das Trevas nas ruas destruídas de Gotham', c1: '#1c2733', c2: '#080a0c', img: shot('5da3185e4f7da999300555747be6b84b8f16164f') },
+      { tag: 'Batmóvel', desc: 'O Batmóvel em modo de espera', c1: '#232b36', c2: '#0c1016', img: shot('ccff12cebf58bc7d1d3e0a5783eba65c4aecf345') },
+      { tag: 'Gotham City', desc: 'Becos de Gotham sob a chuva e o neon', c1: '#161c25', c2: '#05060a', img: shot('4c9d5fb849b1a7169184a37db000919b276056fe') },
+      { tag: 'Vilões', desc: 'Duas-Caras, Pinguim e Arlequina', c1: '#2b1720', c2: '#0d0709', img: shot('315ff2cdd5f50d28614ae9cfa45283bb2b9f969e') },
+      { tag: 'Combate', desc: 'Batman enfrentando a milícia ao lado do Batmóvel', c1: '#2a1c14', c2: '#0d0805', img: shot('90026e46a995760d53bfa2dc1612b73960c84c94') },
+      { tag: 'Arkham Knight', desc: 'O antagonista mascarado à frente de seu exército', c1: '#2c1418', c2: '#0e0708', img: shot('9ccb4ec0388cd868c0f49580f98da94e8bd0e213') },
     ];
 
     const galGrid = document.getElementById('galGrid');
     galGrid.innerHTML = gallery.map(g => `
-  <div class="gal-item" style="--c1:${g.c1};--c2:${g.c2}" data-tag="${g.tag}" data-c1="${g.c1}" data-c2="${g.c2}">
-    <div class="gi-icon">${galleryIconBat}</div>
+  <div class="gal-item" style="--c1:${g.c1};--c2:${g.c2}" data-tag="${g.tag}" data-img="${g.img}" data-desc="${g.desc}">
+    <img src="${g.img}" alt="${g.desc} — Batman: Arkham Knight" loading="lazy">
     <span class="gi-tag">${g.tag}</span>
   </div>
 `).join('');
 
     const modal = document.getElementById('modal');
-    const modalPanel = document.getElementById('modalPanel');
+    const modalImage = document.getElementById('modalImage');
     const modalCaption = document.getElementById('modalCaption');
     const modalClose = document.getElementById('modalClose');
 
     galGrid.querySelectorAll('.gal-item').forEach(item => {
       item.addEventListener('click', () => {
-        modalPanel.style.background = `linear-gradient(160deg, ${item.dataset.c1}, ${item.dataset.c2})`;
+        modalImage.src = item.dataset.img;
+        modalImage.alt = `${item.dataset.desc} — Batman: Arkham Knight`;
         modalCaption.textContent = item.dataset.tag;
         modal.classList.add('open');
       });
