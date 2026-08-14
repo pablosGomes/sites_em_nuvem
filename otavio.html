@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CraftVerse — Um mundo feito de blocos</title>
+    <meta name="description"
+        content="Página temática sobre Minecraft: biomas, mobs, itens e curiosidades de um mundo feito de blocos.">
+
+    <!-- Fontes: "Press Start 2P" para títulos (efeito pixel) e "VT323" para texto (retrô legível) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="otavio.css">
+</head>
+
+<body>
+
+    <!-- ===================== HEADER ===================== -->
+    <header class="site-header" id="topo">
+        <div class="header-inner">
+            <a href="#topo" class="logo">
+                <span class="logo-block" aria-hidden="true"></span>
+                <span class="logo-text">CRAFT<span class="logo-accent">VERSE</span></span>
+            </a>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="#topo" class="nav-link active">Início</a></li>
+                    <li><a href="#sobre" class="nav-link">Sobre</a></li>
+                    <li><a href="#modos" class="nav-link">Modos</a></li>
+                    <li><a href="#biomas" class="nav-link">Biomas</a></li>
+                    <li><a href="#mobs" class="nav-link">Mobs</a></li>
+                    <li><a href="#itens" class="nav-link">Itens</a></li>
+                    <li><a href="#curiosidades" class="nav-link">Curiosidades</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ===================== HERO ===================== -->
+        <section class="hero" id="hero">
+            <!-- SUBSTITUA a imagem de fundo abaixo por uma screenshot sua do jogo (ver style.css, seletor .hero) -->
+            <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
+
+            <div class="hero-content reveal">
+                <p class="eyebrow">// bem-vindo ao servidor</p>
+                <h1 class="hero-title">MINECRAFT</h1>
+                <p class="hero-subtitle">Explore, construa e sobreviva em um mundo sem limites.</p>
+            </div>
+
+            <div class="hero-hotbar" aria-hidden="true">
+                <div class="hotbar-slot"></div>
+                <div class="hotbar-slot"></div>
+                <div class="hotbar-slot selected"></div>
+                <div class="hotbar-slot"></div>
+                <div class="hotbar-slot"></div>
+                <div class="hotbar-slot"></div>
+                <div class="hotbar-slot"></div>
+                <div class="hotbar-slot"></div>
+                <div class="hotbar-slot"></div>
+            </div>
+        </section>
+
+        <!-- ===================== SOBRE ===================== -->
+        <section class="section sobre" id="sobre">
+            <div class="section-inner sobre-grid">
+                <div class="sobre-texto reveal">
+                    <p class="section-eyebrow">01 · sobre o jogo</p>
+                    <h2 class="section-title">Um mundo inteiro feito de blocos</h2>
+                    <p>Minecraft é um jogo sandbox onde cada elemento do cenário — árvores, montanhas, rios e cavernas —
+                        é formado por blocos que podem ser quebrados, coletados e reposicionados livremente. Não existe
+                        um único caminho certo: cada jogador decide se quer construir castelos, cultivar fazendas,
+                        explorar cavernas profundas ou simplesmente sobreviver mais uma noite.</p>
+                    <p>Essa liberdade total é o motivo do seu sucesso. Sem uma história fixa nem um objetivo
+                        obrigatório, o jogo se adapta ao estilo de quem joga: pode ser um simulador de construção
+                        tranquilo ou um desafio de sobrevivência tenso, dependendo apenas da escolha do modo de jogo.
+                    </p>
+                    <div class="sobre-stats">
+                        <div class="stat-slot">
+                            <strong>2011</strong>
+                            <span>ano de lançamento oficial</span>
+                        </div>
+                        <div class="stat-slot">
+                            <strong>+300M</strong>
+                            <span>cópias vendidas no mundo</span>
+                        </div>
+                        <div class="stat-slot">
+                            <strong>∞</strong>
+                            <span>mundos possíveis de gerar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBSTITUA por uma imagem sua (paisagem ou construção do jogo) -->
+                <div class="sobre-imagem reveal">
+                    <img src="img_otavio/inicio.png"
+                        alt="Paisagem ilustrativa de Minecraft" loading="lazy">
+                    <div class="imagem-moldura" aria-hidden="true"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== MODOS DE JOGO ===================== -->
+        <section class="section modos" id="modos">
+            <div class="section-inner">
+                <p class="section-eyebrow center">02 · modos de jogo</p>
+                <h2 class="section-title center">Escolha como quer jogar</h2>
+                <p class="section-desc center">Cada modo muda completamente a experiência — do relaxamento total ao
+                    desafio extremo.</p>
+
+                <div class="cards-grid modos-grid">
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-grass" aria-hidden="true"></div>
+                        <h3>Sobrevivência</h3>
+                        <p>Colete recursos, construa abrigos e enfrente monstros para sobreviver noite após noite.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-gold" aria-hidden="true"></div>
+                        <h3>Criativo</h3>
+                        <p>Recursos infinitos e voo livre para construir qualquer coisa que a imaginação permitir.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-iron" aria-hidden="true"></div>
+                        <h3>Aventura</h3>
+                        <p>Feito para mapas personalizados, com regras especiais definidas por quem criou o mundo.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-redstone" aria-hidden="true"></div>
+                        <h3>Hardcore</h3>
+                        <p>Sobrevivência no nível máximo de dificuldade — e apenas uma vida disponível.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-diamond" aria-hidden="true"></div>
+                        <h3>Espectador</h3>
+                        <p>Atravesse blocos e observe o mundo livremente, sem interagir com nada ao redor.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== BIOMAS ===================== -->
+        <section class="section biomas" id="biomas">
+            <div class="section-inner">
+                <p class="section-eyebrow center">03 · biomas</p>
+                <h2 class="section-title center">Territórios para explorar</h2>
+                <p class="section-desc center">Cada bioma tem seu próprio visual, clima e recursos exclusivos.</p>
+
+                <div class="cards-grid biomas-grid" id="biomasGrid">
+                    <!-- Cada imagem abaixo pode ser substituída por uma screenshot real do bioma correspondente -->
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/floresta.png"
+                            alt="Bioma Floresta" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>Floresta</h3>
+                            <p>Árvores densas, madeira em abundância e animais pacatos vagando entre as folhas.</p>
+                        </div>
+                    </article>
+
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/deserto.png"
+                            alt="Bioma Deserto" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>Deserto</h3>
+                            <p>Dunas intermináveis de areia, templos escondidos e pouquíssima água por perto.</p>
+                        </div>
+                    </article>
+
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/taiga.png"
+                            alt="Bioma Taiga" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>Taiga</h3>
+                            <p>Florestas de coníferas cobertas por um verde escuro, com lobos rondando a região.</p>
+                        </div>
+                    </article>
+
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/selva.png"
+                            alt="Bioma Selva" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>Selva</h3>
+                            <p>Vegetação alta e fechada, templos antigos e a rara chance de encontrar um pandinha.</p>
+                        </div>
+                    </article>
+
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/oceano.png"
+                            alt="Bioma Oceano" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>Oceano</h3>
+                            <p>Águas profundas com naufrágios, monumentos submersos e recifes de coral coloridos.</p>
+                        </div>
+                    </article>
+
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/planicies.png"
+                            alt="Bioma Planícies" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>Planícies</h3>
+                            <p>Campos abertos e planos, ideais para as primeiras construções de qualquer jogador.</p>
+                        </div>
+                    </article>
+
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/nether.png"
+                            alt="Bioma Nether" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>Nether</h3>
+                            <p>Dimensão infernal de lava e rocha vermelha, habitada pelas criaturas mais hostis.</p>
+                        </div>
+                    </article>
+
+                    <article class="photo-card reveal">
+                        <img src="img_otavio/the_end.png"
+                            alt="Bioma The End" loading="lazy">
+                        <div class="photo-card-body">
+                            <h3>The End</h3>
+                            <p>Ilhas flutuantes isoladas no vazio, lar do desafio final do jogo.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== MOBS ===================== -->
+        <section class="section mobs" id="mobs">
+            <div class="section-inner">
+                <p class="section-eyebrow center">04 · mobs</p>
+                <h2 class="section-title center">Quem habita esse mundo</h2>
+                <p class="section-desc center">Passe o mouse sobre cada criatura para vê-la reagir.</p>
+
+                <div class="cards-grid mobs-grid" id="mobsGrid">
+                    <!-- Substitua cada imagem pela arte/screenshot do mob correspondente -->
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/steve.png"
+                                alt="Steve — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Steve</h3>
+                        <span class="mob-tag">Jogador</span>
+                    </article>
+
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/creeper.png"
+                                alt="Creeper — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Creeper</h3>
+                        <span class="mob-tag mob-tag-hostile">Hostil</span>
+                    </article>
+
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/zombie.png"
+                                alt="Zombie — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Zombie</h3>
+                        <span class="mob-tag mob-tag-hostile">Hostil</span>
+                    </article>
+
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/skeleton.png"
+                                alt="Skeleton — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Skeleton</h3>
+                        <span class="mob-tag mob-tag-hostile">Hostil</span>
+                    </article>
+
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/enderman.png"
+                                alt="Enderman — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Enderman</h3>
+                        <span class="mob-tag mob-tag-neutral">Neutro</span>
+                    </article>
+
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/villager.png"
+                                alt="Villager — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Villager</h3>
+                        <span class="mob-tag mob-tag-passive">Pacato</span>
+                    </article>
+
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/iron_golem.png"
+                                alt="Iron Golem — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Iron Golem</h3>
+                        <span class="mob-tag mob-tag-passive">Protetor</span>
+                    </article>
+
+                    <article class="mob-card reveal">
+                        <div class="mob-card-media">
+                            <img src="img_otavio/ender_dragon.png"
+                                alt="Ender Dragon — substitua pela sua imagem" loading="lazy">
+                        </div>
+                        <h3>Ender Dragon</h3>
+                        <span class="mob-tag mob-tag-boss">Chefe</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== ITENS E RECURSOS ===================== -->
+        <section class="section itens" id="itens">
+            <div class="section-inner">
+                <p class="section-eyebrow center">05 · itens e recursos</p>
+                <h2 class="section-title center">Recursos que movem o mundo</h2>
+                <p class="section-desc center">Do básico ao lendário — o que vale a pena minerar.</p>
+
+                <div class="cards-grid itens-grid">
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-diamond" aria-hidden="true"></div>
+                        <h3>Diamante</h3>
+                        <p>Encontrado nas profundezas, cria as ferramentas e armaduras mais resistentes antes da
+                            netherite.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-iron" aria-hidden="true"></div>
+                        <h3>Ferro</h3>
+                        <p>O metal essencial do início do jogo, usado em ferramentas, armaduras e blindagens.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-gold" aria-hidden="true"></div>
+                        <h3>Ouro</h3>
+                        <p>Brilhante e versátil, usado em trocas com piglins e em itens especiais de proteção.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-redstone" aria-hidden="true"></div>
+                        <h3>Redstone</h3>
+                        <p>O "fio elétrico" do jogo — permite criar circuitos, mecanismos e contraptions complexas.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-emerald" aria-hidden="true"></div>
+                        <h3>Esmeralda</h3>
+                        <p>Rara e valiosa, funciona como a moeda de troca oficial com os aldeões.</p>
+                    </article>
+
+                    <article class="slot-card reveal">
+                        <div class="card-icon block-icon block-netherite" aria-hidden="true"></div>
+                        <h3>Netherite</h3>
+                        <p>O material mais forte do jogo, forjado a partir de sucata encontrada no Nether.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== CURIOSIDADES ===================== -->
+        <section class="section curiosidades" id="curiosidades">
+            <div class="section-inner">
+                <p class="section-eyebrow center">06 · curiosidades</p>
+                <h2 class="section-title center">Pequenos fatos, grande história</h2>
+
+                <div class="timeline">
+                    <div class="timeline-item reveal">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">2009</span>
+                            <p>O jogo começou como um projeto solo do programador sueco Markus "Notch" Persson.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item reveal">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">2011</span>
+                            <p>Versão oficial 1.0 lançada, marcando a saída do jogo do estágio de acesso antecipado.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item reveal">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">Curiosidade</span>
+                            <p>O nome "Creeper" surgiu de um erro de programação: o criador tentou modelar um porco e o
+                                modelo saiu errado.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item reveal">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">Recorde</span>
+                            <p>É um dos jogos mais vendidos da história, com centenas de milhões de cópias em
+                                praticamente todas as plataformas.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item reveal">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-year">Comunidade</span>
+                            <p>Grande parte da longevidade do jogo vem dos mods e mapas criados pela própria comunidade
+                                de jogadores.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col footer-brand">
+                <div class="logo">
+                    <span class="logo-block" aria-hidden="true"></span>
+                    <span class="logo-text">CRAFT<span class="logo-accent">VERSE</span></span>
+                </div>
+                <p>Página de fã dedicada ao universo de Minecraft. Não afiliada à Mojang ou à Microsoft.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Seções</h4>
+                <ul>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#biomas">Biomas</a></li>
+                    <li><a href="#mobs">Mobs</a></li>
+                    <li><a href="#itens">Itens</a></li>
+                    <li><a href="#curiosidades">Curiosidades</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Redes sociais</h4>
+                <ul>
+                    <li><a href="#">Twitter / X</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">YouTube</a></li>
+                    <li><a href="#">Discord</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; <span id="anoAtual"></span> CraftVerse. Projeto de fã, sem fins comerciais.</p>
+        </div>
+    </footer>
+
+    <!-- Botão voltar ao topo -->
+    <button id="backToTop" class="back-to-top" aria-label="Voltar ao topo">↑</button>
+
+    <script src="otavio.js"></script>
+</body>
+
+</html>
