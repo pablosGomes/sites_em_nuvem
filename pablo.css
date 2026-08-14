@@ -1,0 +1,528 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+/* ==========================================================================
+   ELDEN RING — SISTEMA VISUAL
+   Paleta tirada da direção de arte do jogo: preto profundo, ouro da Erdtree
+   e o âmbar das Graças. Nada de branco puro — no jogo tudo é envelhecido.
+   ========================================================================== */
+:root {
+  --night: #070605;
+  --soil: #0e0b08;
+  --bark: #16110c;
+  --stone: #241c14;
+  --stone-soft: #1b150f;
+
+  --gold: #c9a227;
+  --gold-lit: #e8cd7a;
+  --gold-pale: #f3e5b6;
+  --grace: #ffd97a;
+
+  --parch: #d9cba8;
+  --dust: #96876c;
+  --dim: #6b6050;
+
+  --blood: #7a1010;
+  --blood-lit: #b52a2a;
+  --moon: #7d9dc4;
+  --rot: #8fa03a;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  /* Lenis controla a rolagem; sem isso o scroll nativo briga com ele */
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--parch);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.15rem);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Lenis: exigido pela biblioteca para a rolagem suave funcionar */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+/* ==========================================================================
+   TIPOGRAFIA
+   Cinzel é o parente mais próximo da capitular romana usada pelo jogo.
+   ========================================================================== */
+.font-er {
+  font-family: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.t-hero  { font-size: clamp(2.6rem, 1.2rem + 6vw, 7rem); letter-spacing: 0.1em; line-height: 1.05; }
+.t-h2    { font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.4rem); letter-spacing: 0.09em; line-height: 1.15; }
+.t-h3    { font-size: clamp(1.15rem, 1rem + 0.7vw, 1.6rem); letter-spacing: 0.08em; }
+.t-label {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Ouro polido: o degradê imita o brilho metálico do letreiro do jogo */
+.gold-text {
+  background: linear-gradient(180deg, #f6ecc4 0%, var(--gold-lit) 38%, var(--gold) 62%, #8a6c18 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 10px rgba(201, 162, 39, 0.25));
+}
+
+.measure { max-width: 66ch; }
+
+/* Texto por cima de imagem. O halo escuro garante leitura mesmo no trecho
+   mais claro da arte, sem precisar escurecer a imagem inteira. */
+.on-media {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 2px 18px rgba(0,0,0,0.85), 0 0 44px rgba(0,0,0,0.6);
+}
+/* Sobre imagem o texto de item precisa de mais corpo que o padrão apagado */
+.on-media.item-desc { color: var(--parch); }
+
+/* Texto de descrição de item: itálico e apagado, como no inventário */
+.item-desc {
+  font-style: italic;
+  color: var(--dust);
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+/* ==========================================================================
+   ATMOSFERA
+   ========================================================================== */
+.grain::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 90;
+  opacity: 0.05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Vinheta permanente: o jogo nunca mostra os cantos da tela iluminados */
+.vig::after {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 88;
+  background: radial-gradient(ellipse at 50% 45%, transparent 42%, rgba(7,6,5,0.55) 82%, rgba(7,6,5,0.92) 100%);
+}
+
+.media { position: relative; overflow: hidden; background: var(--soil); }
+.media img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  /* As capturas são vibrantes; o jogo é mais terroso e escuro */
+  filter: saturate(0.86) contrast(1.08) brightness(0.82);
+  transition: transform 1.2s var(--ease-out), filter 0.8s ease;
+}
+.media-zoom:hover img { transform: scale(1.06); filter: saturate(1) contrast(1.1) brightness(0.95); }
+
+/* A imagem de abertura desliza com a rolagem. Precisa de sobra em cima e
+   embaixo, senão a paralaxe descola e mostra o fundo vazio. E sem transição:
+   o scrub reescreve o transform a cada quadro e a transição o atrasaria. */
+#heroImg {
+  position: absolute;
+  left: 0; top: -15%;
+  width: 100%; height: 130%;
+  transition: none;
+}
+
+.scrim::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, var(--night) 2%, rgba(7,6,5,0.72) 30%, transparent 70%);
+}
+
+/* Moldura dourada fina, como as bordas de menu do jogo */
+.frame-gold {
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.6), 0 20px 60px -30px rgba(0,0,0,0.9);
+}
+
+/* Separador ornamental */
+.ornament {
+  display: flex; align-items: center; gap: 1rem;
+  color: var(--gold); opacity: 0.5;
+}
+.ornament::before, .ornament::after {
+  content: ""; height: 1px; flex: 1;
+  background: linear-gradient(to right, transparent, rgba(201,162,39,0.5), transparent);
+}
+
+/* ==========================================================================
+   TELA DE CARREGAMENTO
+   Reproduz a tela preta com dica que aparece antes de cada área do jogo.
+   ========================================================================== */
+/* Só existe quando há JS para dispensá-la depois. Sem script, ela nunca
+   aparece — do contrário cobriria a página inteira para sempre. */
+#loader { display: none; }
+.js #loader {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--night);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 1.1s ease, visibility 1.1s ease;
+}
+#loader.done { opacity: 0; visibility: hidden; }
+
+.loader-tip {
+  max-width: 46ch; text-align: center;
+  color: var(--dust); font-style: italic;
+  padding: 0 1.5rem;
+}
+
+/* "NOW LOADING" no canto, com as reticências pulsando */
+.now-loading {
+  position: absolute; right: 2.4rem; bottom: 2rem;
+  color: var(--gold-lit); opacity: 0.85;
+}
+.now-loading i { font-style: normal; animation: dots 1.4s steps(4, end) infinite; }
+@keyframes dots { 0% { opacity: 0.15; } 50% { opacity: 1; } 100% { opacity: 0.15; } }
+.now-loading i:nth-child(2) { animation-delay: 0.2s; }
+.now-loading i:nth-child(3) { animation-delay: 0.4s; }
+
+/* Anel giratório de carregamento */
+.load-ring {
+  width: 54px; height: 54px; margin-bottom: 2.2rem;
+  border: 1px solid rgba(201,162,39,0.25);
+  border-top-color: var(--gold-lit);
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ==========================================================================
+   HUD — barras de vida, como no canto superior esquerdo do jogo
+   ========================================================================== */
+/* Fica abaixo da barra de navegação (4rem no mobile, 5rem a partir de md),
+   senão as barras caem exatamente em cima do logo do menu. */
+#hud {
+  position: fixed; top: 4.9rem; left: 1.4rem; z-index: 80;
+  pointer-events: none;
+  opacity: 0; transform: translateX(-14px);
+  transition: opacity 0.9s ease, transform 0.9s var(--ease-out);
+}
+#hud.on { opacity: 1; transform: none; }
+@media (min-width: 768px) { #hud { top: 5.9rem; } }
+
+.bar {
+  position: relative; height: 11px; margin-bottom: 5px;
+  background: #100c09;
+  border: 1px solid rgba(0,0,0,0.85);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.9), 0 0 0 1px rgba(140,120,80,0.22);
+}
+.bar > i {
+  display: block; height: 100%;
+  transition: width 0.6s var(--ease-out);
+}
+.bar-hp    { width: 232px; } .bar-hp    > i { background: linear-gradient(180deg, #a02020, #6d1212); }
+.bar-fp    { width: 168px; } .bar-fp    > i { background: linear-gradient(180deg, #3f7fa8, #24506d); }
+.bar-stam  { width: 190px; } .bar-stam  > i { background: linear-gradient(180deg, #6d8a3a, #445626); }
+
+/* Em telas estreitas as barras encolhem para não ocupar meia tela.
+   Precisa vir depois das larguras acima, senão perde na ordem da cascata. */
+@media (max-width: 480px) {
+  .bar-hp   { width: 150px; }
+  .bar-fp   { width: 108px; }
+  .bar-stam { width: 124px; }
+}
+
+/* Contador de runas, canto inferior direito, igual ao jogo */
+#runes {
+  position: fixed; right: 1.6rem; bottom: 1.4rem; z-index: 80;
+  pointer-events: none; text-align: right;
+  opacity: 0; transition: opacity 0.9s ease;
+}
+#runes.on { opacity: 1; }
+#runes .val {
+  font-family: 'Cinzel', serif; font-size: 1.5rem;
+  color: var(--gold-pale); letter-spacing: 0.06em;
+  text-shadow: 0 0 14px rgba(255,217,122,0.35), 0 2px 4px #000;
+}
+
+/* ==========================================================================
+   MENSAGENS DE JOGADOR — os recados douradinhos deixados no chão
+   ========================================================================== */
+.msg {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem; letter-spacing: 0.12em;
+  color: #e8c86a;
+  text-shadow: 0 0 12px rgba(232,200,106,0.55), 0 0 30px rgba(232,200,106,0.25);
+  cursor: help;
+  transition: text-shadow 0.4s ease, color 0.4s ease;
+}
+.msg::before { content: "◈ "; opacity: 0.7; }
+.msg:hover { color: #fff0bb; text-shadow: 0 0 18px rgba(255,240,187,0.8), 0 0 44px rgba(232,200,106,0.4); }
+
+/* ==========================================================================
+   BARRA DE CHEFE — a barra fina na base da tela nas lutas
+   ========================================================================== */
+.boss-bar {
+  position: relative;
+  height: 9px;
+  background: linear-gradient(180deg, #1a0d0d, #0d0707);
+  border: 1px solid rgba(0,0,0,0.9);
+  box-shadow: 0 0 0 1px rgba(150,120,70,0.3), inset 0 1px 3px rgba(0,0,0,0.9);
+  overflow: hidden;
+}
+.boss-bar > i {
+  display: block; height: 100%; width: 100%;
+  background: linear-gradient(180deg, #c23b2c, #8a1d16 55%, #5e0f0c);
+  transform-origin: left center;
+  transition: transform 1.5s cubic-bezier(0.3, 0.9, 0.2, 1);
+}
+.boss-card.felled .boss-bar > i { transform: scaleX(0); }
+
+/* Brilho que percorre a barra, como o reflexo do HUD */
+.boss-bar::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+  transform: translateX(-100%);
+  animation: sheen 5s ease-in-out infinite;
+}
+@keyframes sheen { 0%, 70% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* Afordância: o card precisa parecer clicável antes do clique */
+.boss-card { cursor: pointer; position: relative; }
+.boss-card::after {
+  content: "⚔";
+  position: absolute; top: 1.2rem; right: 1.4rem;
+  color: var(--gold); opacity: 0; font-size: 1.1rem;
+  transition: opacity 0.4s ease, transform 0.4s var(--ease-out);
+  transform: translateY(4px);
+}
+.boss-card:hover::after, .boss-card:focus-visible::after { opacity: 0.75; transform: none; }
+
+/* Depois de abatido o card esmaece e para de convidar ao clique */
+.boss-card.felled { cursor: default; opacity: 0.62; }
+.boss-card.felled::after { content: "✝"; opacity: 0.5; transform: none; }
+.boss-card.felled:hover { transform: none; border-color: rgba(201,162,39,0.14); box-shadow: none; }
+.boss-card.felled .estado { color: var(--blood-lit); }
+
+/* ==========================================================================
+   BANNERS — "GREAT ENEMY FELLED" e "YOU DIED"
+   ========================================================================== */
+#banner {
+  position: fixed; inset: 0; z-index: 150;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+}
+#banner.show { animation: banner-in 3.8s ease forwards; }
+@keyframes banner-in {
+  0%   { opacity: 0; }
+  11%  { opacity: 1; }
+  68%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* A mancha escura do jogo é larga e baixa: atravessa a tela inteira e some
+   nas laterais. Uma elipse achatada faz isso melhor que um borrão redondo,
+   que deixaria o cenário aparecendo em volta do texto. */
+#banner .plate {
+  position: relative;
+  width: 100%;
+  padding: 4.5rem 1.5rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 46% 130% at 50% 50%, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.86) 34%, rgba(0,0,0,0.55) 62%, rgba(0,0,0,0) 100%);
+}
+
+/* Fio de luz quente atrás do texto, como o brilho que o jogo deixa na faixa */
+#banner .plate::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 50%;
+  height: 2px; transform: translateY(-50%);
+  background: radial-gradient(ellipse 34% 100% at 50% 50%, rgba(255, 214, 140, 0.5), transparent 70%);
+  filter: blur(7px);
+}
+
+/* Ouro metálico com degradê vertical — o texto do jogo não é creme chapado */
+#banner .txt {
+  position: relative;
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 0.7rem + 3.4vw, 3.7rem);
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+  background: linear-gradient(180deg, #fffaea 0%, #f4e6bc 30%, #e0c98c 58%, #b99a55 82%, #8f7134 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: banner-txt 3.8s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+/* Entra levemente desfocado e cresce devagar, como na tela original */
+@keyframes banner-txt {
+  0% {
+    transform: scale(0.955);
+    filter: blur(9px) drop-shadow(0 0 20px rgba(255, 219, 150, 0.15));
+  }
+  16% {
+    filter: blur(0) drop-shadow(0 0 22px rgba(255, 219, 150, 0.5)) drop-shadow(0 0 60px rgba(226, 180, 100, 0.35));
+  }
+  100% {
+    transform: scale(1.035);
+    filter: blur(0) drop-shadow(0 0 26px rgba(255, 219, 150, 0.42)) drop-shadow(0 0 70px rgba(226, 180, 100, 0.28));
+  }
+}
+
+/* YOU DIED: a tela inteira escurece e o texto é carmim, não dourado */
+#banner.death { background: rgba(0, 0, 0, 0.72); }
+#banner.death .plate {
+  background: radial-gradient(ellipse 50% 140% at 50% 50%, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0) 100%);
+}
+#banner.death .plate::before {
+  background: radial-gradient(ellipse 30% 100% at 50% 50%, rgba(150, 20, 20, 0.45), transparent 70%);
+}
+#banner.death .txt {
+  background: linear-gradient(180deg, #c22b2b 0%, #9d1414 42%, #6d0d0d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  letter-spacing: 0.2em;
+  animation-name: banner-txt-death;
+}
+@keyframes banner-txt-death {
+  0%   { transform: scale(0.95); filter: blur(10px) drop-shadow(0 0 20px rgba(160, 20, 20, 0.2)); }
+  18%  { filter: blur(0) drop-shadow(0 0 30px rgba(170, 25, 25, 0.55)); }
+  100% { transform: scale(1.04); filter: blur(0) drop-shadow(0 0 36px rgba(170, 25, 25, 0.45)); }
+}
+
+/* ==========================================================================
+   AVISO DE ITEM OBTIDO — o retângulo que desliza ao pegar algo
+   ========================================================================== */
+#pickups {
+  position: fixed; left: 50%; bottom: 12vh; z-index: 120;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; gap: 8px;
+  pointer-events: none; width: min(92vw, 460px);
+}
+.pickup {
+  background: linear-gradient(90deg, rgba(10,8,6,0.2), rgba(10,8,6,0.94) 22%, rgba(10,8,6,0.94) 78%, rgba(10,8,6,0.2));
+  padding: 0.7rem 1.4rem;
+  text-align: center;
+  font-family: 'Cinzel', serif; font-size: 0.82rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold-pale);
+  border-top: 1px solid rgba(201,162,39,0.3);
+  border-bottom: 1px solid rgba(201,162,39,0.3);
+  animation: pickup 4.2s ease forwards;
+}
+@keyframes pickup {
+  0%   { opacity: 0; transform: translateY(10px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  82%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+
+/* ==========================================================================
+   PORTAL DE NÉVOA — a barreira branca antes das salas de chefe
+   ========================================================================== */
+.fog {
+  position: absolute; inset-inline: 0; height: 190px;
+  pointer-events: none; z-index: 4;
+  background: linear-gradient(180deg, transparent, rgba(190,205,215,0.09) 45%, transparent);
+  filter: blur(14px);
+}
+.fog-top { top: -95px; }
+
+/* ==========================================================================
+   GRAÇA — o brilho dourado dos Sítios de Graça
+   ========================================================================== */
+.grace-glow {
+  position: relative;
+}
+.grace-glow::before {
+  content: ""; position: absolute;
+  left: 50%; top: 50%; width: 300px; height: 300px;
+  margin: -150px 0 0 -150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,217,122,0.32), rgba(255,217,122,0.06) 45%, transparent 70%);
+  animation: grace-breathe 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes grace-breathe {
+  0%, 100% { transform: scale(0.92); opacity: 0.65; }
+  50%      { transform: scale(1.1); opacity: 1; }
+}
+
+/* ==========================================================================
+   REVELAÇÃO AO ROLAR
+   Só esconde quando há JS — sem script, a página continua legível.
+   ========================================================================== */
+.js .rise { opacity: 0; transform: translateY(34px); }
+
+/* ==========================================================================
+   COMPONENTES
+   ========================================================================== */
+.card {
+  background: linear-gradient(165deg, var(--stone-soft), var(--night));
+  border: 1px solid rgba(201, 162, 39, 0.14);
+  transition: border-color 0.5s ease, transform 0.5s var(--ease-out), box-shadow 0.5s ease;
+}
+.card:hover {
+  border-color: rgba(201, 162, 39, 0.42);
+  transform: translateY(-4px);
+  box-shadow: 0 26px 60px -34px rgba(0,0,0,0.95), 0 0 40px -20px rgba(201,162,39,0.25);
+}
+
+.btn-er {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  font-family: 'Cinzel', serif; font-size: 0.76rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold-lit);
+  border: 1px solid rgba(201,162,39,0.4);
+  background: rgba(10,8,6,0.6);
+  padding: 0.9rem 1.8rem;
+  cursor: pointer;
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.btn-er:hover {
+  background: rgba(201,162,39,0.14);
+  color: var(--gold-pale);
+  border-color: var(--gold);
+  box-shadow: 0 0 26px -6px rgba(201,162,39,0.5);
+}
+
+.nav-link { position: relative; }
+.nav-link::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: -5px;
+  height: 1px; background: var(--gold);
+  transition: right 0.45s var(--ease-out);
+}
+.nav-link:hover::after, .nav-link.active::after { right: 0; }
+
+:focus-visible { outline: 1px solid var(--gold-lit); outline-offset: 4px; }
+::selection { background: rgba(201,162,39,0.32); color: var(--gold-pale); }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--night); }
+::-webkit-scrollbar-thumb { background: var(--stone); border: 2px solid var(--night); }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ==========================================================================
+   MOVIMENTO REDUZIDO
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js .rise { opacity: 1; transform: none; }
+  #motes { display: none; }
+}
