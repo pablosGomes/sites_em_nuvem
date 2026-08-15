@@ -498,6 +498,30 @@ html.lenis, html.lenis body { height: auto; }
   box-shadow: 0 0 26px -6px rgba(201,162,39,0.5);
 }
 
+/* Volta ao hub: mesma moldura dourada dos botões da página, em escala menor */
+.btn-hub {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-lit);
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  background: rgba(10, 8, 6, 0.5);
+  padding: 0.5rem 0.95rem;
+  margin: 0.75rem 0 0.25rem;
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+@media (min-width: 768px) { .btn-hub { margin: 0 0 0 0.35rem; } }
+.btn-hub:hover {
+  background: rgba(201, 162, 39, 0.16);
+  color: var(--gold-pale);
+  border-color: var(--gold);
+  box-shadow: 0 0 22px -6px rgba(201, 162, 39, 0.6);
+}
+
 .nav-link { position: relative; }
 .nav-link::after {
   content: ""; position: absolute; left: 0; right: 100%; bottom: -5px;

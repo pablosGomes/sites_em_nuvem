@@ -1,658 +1,389 @@
 /* ==========================================================================
-   SUBNAUTICA 2 - OFFICIAL PORTAL ENGINE & VOICE SYNTHESIS (game.js)
+   SUBNAUTICA — PÁGINA INFORMATIVA
    ========================================================================== */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.getElementById('ano').textContent = new Date().getFullYear();
 
-  // ------------------------------------------------------------------------
-  // 1. VOZ DA IA DO PDA (Web Speech API) & ÁUDIO DO SONAR
-  // ------------------------------------------------------------------------
-  let isMuted = false;
-  let audioContext = null;
+const SHOT = (app, hash) =>
+  `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${app}/ss_${hash}.1920x1080.jpg`;
+const SHOT2 = (app, hash) =>
+  `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${app}/${hash}/ss_${hash}.1920x1080.jpg`;
 
-  function speakAlterraAI(text) {
-    if (isMuted || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel(); // Evita sobreposição
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US'; // Voz padrão Sci-Fi do jogo
-    utterance.rate = 1.05;
-    utterance.pitch = 1.2;
-
-    const voices = window.speechSynthesis.getVoices();
-    const femaleVoice = voices.find(v => v.lang.includes('en') && (v.name.includes('Female') || v.name.includes('Zira') || v.name.includes('Samantha')));
-    if (femaleVoice) utterance.voice = femaleVoice;
-
-    window.speechSynthesis.speak(utterance);
+/* ==========================================================================
+   1. PERFIL DE PROFUNDIDADE
+   Faixas aproximadas: os biomas se sobrepõem no mapa real do jogo.
+   ========================================================================== */
+const faixas = [
+  {
+    prof: '0 – 80 m', nome: 'Recifes rasos', risco: 'seguro', cor: 'var(--teal)',
+    texto: 'Água clara, cardumes inofensivos e boa parte dos recursos básicos. É onde a cápsula de escape cai e onde quase todo mundo constrói a primeira base.'
+  },
+  {
+    prof: '0 – 160 m', nome: 'Floresta de algas', risco: 'atenção', cor: 'var(--amber)',
+    texto: 'Talos gigantes que bloqueiam a visão e escondem predadores de porte médio. Fonte importante de sementes e de um dos primeiros materiais de construção.'
+  },
+  {
+    prof: '80 – 250 m', nome: 'Floresta de cogumelos', risco: 'atenção', cor: 'var(--amber)',
+    texto: 'Estruturas enormes em forma de cogumelo, com destroços espalhados entre elas. A luz já começa a ficar escassa.'
+  },
+  {
+    prof: '200 – 300 m', nome: 'Grande recife', risco: 'perigo', cor: 'var(--danger)',
+    texto: 'Penhascos que descem para o azul-escuro. Aqui aparecem criaturas grandes o suficiente para danificar um veículo.'
+  },
+  {
+    prof: '250 – 500 m', nome: 'Algas sanguíneas', risco: 'perigo', cor: 'var(--danger)',
+    texto: 'Zona quase sem luz natural, dominada por algas vermelho-escuras. Guarda recursos raros e um dos caminhos para o subsolo.'
+  },
+  {
+    prof: '600 – 1000 m', nome: 'Rio Perdido', risco: 'perigo', cor: 'var(--danger)',
+    texto: 'Um rio de água salgada mais densa correndo dentro de cavernas, com ossadas gigantes nas margens. É a porta de entrada para o fundo do planeta.'
+  },
+  {
+    prof: '1200 – 1700 m', nome: 'Zona de lava', risco: 'extremo', cor: 'var(--danger)',
+    texto: 'Calor, rocha derretida e as maiores instalações alienígenas do jogo. Chegar até aqui exige o equipamento mais avançado disponível.'
   }
+];
 
-  function initAudioContext() {
-    if (!audioContext) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      audioContext = new AudioCtx();
-    }
-    if (audioContext.state === 'suspended') audioContext.resume();
-    return audioContext;
-  }
+document.getElementById('depthChart').innerHTML = faixas.map((f, i) => `
+  <div class="depth-row">
+    <div class="depth-mark">${f.prof}</div>
+    <div class="depth-body" role="button" tabindex="0" aria-expanded="false"
+         aria-label="${f.nome}, ${f.prof}">
+      <h3>
+        ${f.nome}
+        <span class="depth-danger" style="color:${f.cor}">${f.risco}</span>
+      </h3>
+      <div class="depth-detail"><p style="margin:0; font-size:0.94rem; color:var(--muted)">${f.texto}</p></div>
+    </div>
+  </div>
+`).join('');
 
-  function playSonar() {
-    if (isMuted) return;
-    const ctx = initAudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.8);
-
-    gain.gain.setValueAtTime(0.2, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.8);
-  }
-
-  function playCollectSound() {
-    if (isMuted) return;
-    const ctx = initAudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(540, ctx.currentTime);
-    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
-
-    gain.gain.setValueAtTime(0.25, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.25);
-  }
-
-  function playCraftSound() {
-    if (isMuted) return;
-    const ctx = initAudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(280, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(1000, ctx.currentTime + 0.35);
-
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.35);
-  }
-
-  // Toggle Som
-  const btnSound = document.getElementById('btn-sound-toggle');
-  const soundIcon = document.getElementById('sound-indicator');
-
-  if (btnSound) {
-    btnSound.addEventListener('click', () => {
-      isMuted = !isMuted;
-      soundIcon.textContent = isMuted ? '🔇' : '🔊';
-      if (!isMuted) {
-        playSonar();
-        speakAlterraAI("Audio systems online.");
-      }
-    });
-  }
-
-  // Boas-vindas da Alterra no primeiro clique na página
-  let welcomeSpoken = false;
-  window.addEventListener('click', () => {
-    if (!welcomeSpoken && !isMuted) {
-      welcomeSpoken = true;
-      speakAlterraAI("Welcome aboard, Captain. All systems online.");
-    }
-  }, { once: true });
-
-  // ------------------------------------------------------------------------
-  // 2. SISTEMA DE SALVAMENTO AUTOMÁTICO (LocalStorage)
-  // ------------------------------------------------------------------------
-  const defaultState = {
-    titanium: 0,
-    quartz: 0,
-    peeper: 0,
-    tanks: 0,
-    hasKnife: false,
-    hasSeaglide: false
+document.querySelectorAll('.depth-body').forEach(faixa => {
+  const alternar = () => {
+    const aberta = faixa.classList.toggle('open');
+    faixa.setAttribute('aria-expanded', String(aberta));
   };
-
-  let inventory = JSON.parse(localStorage.getItem('subnautica_save')) || { ...defaultState };
-
-  function saveGameProgress() {
-    localStorage.setItem('subnautica_save', JSON.stringify(inventory));
-  }
-
-  function updateHUD() {
-    document.getElementById('inv-tit').textContent = inventory.titanium;
-    document.getElementById('inv-qua').textContent = inventory.quartz;
-    document.getElementById('inv-peep').textContent = inventory.peeper;
-
-    document.getElementById('pda-val-tit').textContent = inventory.titanium;
-    document.getElementById('pda-val-qua').textContent = inventory.quartz;
-    document.getElementById('pda-val-peep').textContent = inventory.peeper;
-    document.getElementById('pda-val-tank').textContent = inventory.tanks;
-    document.getElementById('pda-val-knife').textContent = inventory.hasKnife ? 'Instalada' : 'Não';
-    document.getElementById('pda-val-seaglide').textContent = inventory.hasSeaglide ? 'Ativo (+55% Vel)' : 'Não';
-    saveGameProgress();
-  }
-
-  updateHUD();
-
-  // Reset Save
-  const btnReset = document.getElementById('btn-reset-save');
-  if (btnReset) {
-    btnReset.addEventListener('click', () => {
-      if (confirm("Deseja apagar todos os recursos e progresso salvos?")) {
-        inventory = { ...defaultState };
-        updateHUD();
-        alert("Save reiniciado com sucesso.");
-      }
-    });
-  }
-
-  // ------------------------------------------------------------------------
-  // 3. CANVAS 2D: SIMULADOR DE MERGULHO COM CICLO DIA/NOITE & MARINE SNOW
-  // ------------------------------------------------------------------------
-  const canvas = document.getElementById('oceanCanvas');
-  const ctx = canvas.getContext('2d');
-
-  let maxO2 = 100 + (inventory.tanks * 50);
-  let o2 = maxO2;
-  let hp = 100;
-  let baseSpeed = 3.6;
-
-  let dayNightTimer = 0;
-  let o2WarningSpoken = false;
-
-  const player = {
-    x: canvas.width / 2,
-    y: 60,
-    vx: 0,
-    vy: 0,
-    size: 16,
-    facing: 1
-  };
-
-  const keys = {};
-
-  window.addEventListener('keydown', (e) => {
-    keys[e.key.toLowerCase()] = true;
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      togglePDA();
-    }
-    if (e.key.toLowerCase() === 'j') {
-      btnSound.click();
-    }
+  faixa.addEventListener('click', alternar);
+  faixa.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternar(); }
   });
-
-  window.addEventListener('keyup', (e) => {
-    keys[e.key.toLowerCase()] = false;
-  });
-
-  // Entidades do Oceano
-  const minerals = [];
-  const peepers = [];
-  const marineSnow = [];
-
-  const reaper = {
-    x: 100,
-    y: 360,
-    vx: 1.8,
-    size: 45
-  };
-
-  function spawnWorld() {
-    for (let i = 0; i < 12; i++) {
-      minerals.push({
-        x: Math.random() * (canvas.width - 80) + 40,
-        y: Math.random() * 150 + 290,
-        type: Math.random() > 0.4 ? 'titanium' : 'quartz',
-        size: 13,
-        collected: false
-      });
-    }
-
-    for (let i = 0; i < 7; i++) {
-      peepers.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * 250 + 80,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 1,
-        size: 9
-      });
-    }
-
-    // Partículas de Marine Snow (Sedimentos flutuantes)
-    for (let i = 0; i < 40; i++) {
-      marineSnow.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2.5 + 0.8,
-        speedX: (Math.random() - 0.5) * 0.4,
-        speedY: Math.random() * 0.6 + 0.2
-      });
-    }
-  }
-
-  spawnWorld();
-
-  function updateGame() {
-    const speed = inventory.hasSeaglide ? baseSpeed * 1.55 : baseSpeed;
-
-    // Movimentação
-    player.vx = 0;
-    player.vy = 0;
-
-    if (keys['w'] || keys['arrowup']) player.vy = -speed;
-    if (keys['s'] || keys['arrowdown']) player.vy = speed;
-    if (keys['a'] || keys['arrowleft']) { player.vx = -speed; player.facing = -1; }
-    if (keys['d'] || keys['arrowright']) { player.vx = speed; player.facing = 1; }
-
-    player.x += player.vx;
-    player.y += player.vy;
-
-    player.x = Math.max(25, Math.min(canvas.width - 25, player.x));
-    player.y = Math.max(35, Math.min(canvas.height - 35, player.y));
-
-    // Profundidade & Biomas
-    const depth = Math.max(0, Math.round((player.y - 40) * 0.9));
-    document.getElementById('hud-depth-val').textContent = `${depth} m`;
-
-    const biomeElem = document.getElementById('hud-biome-val');
-    if (depth < 60) {
-      biomeElem.textContent = 'SAFE SHALLOWS';
-      biomeElem.className = 'neon-cyan';
-    } else if (depth < 180) {
-      biomeElem.textContent = 'KELP FOREST';
-      biomeElem.className = 'neon-green';
-    } else {
-      biomeElem.textContent = 'LOST RIVER (PERIGO)';
-      biomeElem.className = 'neon-red';
-    }
-
-    // Oxigênio
-    if (player.y <= 55) {
-      o2 = Math.min(maxO2, o2 + 1.5);
-      o2WarningSpoken = false;
-    } else {
-      o2 = Math.max(0, o2 - 0.09);
-      if (o2 <= 30 && !o2WarningSpoken) {
-        o2WarningSpoken = true;
-        speakAlterraAI("Oxygen: 30 seconds.");
-      }
-      if (o2 <= 0) hp = Math.max(0, hp - 0.25);
-    }
-
-    const o2Ratio = (o2 / maxO2) * 100;
-    document.getElementById('hud-o2').textContent = `${Math.round(o2Ratio)}%`;
-    document.getElementById('hud-o2-val').textContent = `${Math.round(o2Ratio)}%`;
-    document.getElementById('hud-o2-bar').style.width = `${o2Ratio}%`;
-    document.getElementById('hud-hp').textContent = `${Math.round(hp)}%`;
-    document.getElementById('hud-hp-fill').style.width = `${hp}%`;
-
-    // Ciclo Dia / Noite (Timer)
-    dayNightTimer += 0.002;
-    const isDay = Math.sin(dayNightTimer) > 0;
-    document.getElementById('hud-time-val').textContent = isDay ? 'DIA (12:00)' : 'NOITE (00:00)';
-    document.getElementById('hud-time-val').className = isDay ? 'neon-gold' : 'neon-cyan';
-
-    // Coleta
-    minerals.forEach((min) => {
-      if (!min.collected) {
-        const d = Math.hypot(player.x - min.x, player.y - min.y);
-        if (d < 30 && (keys['e'] || d < 20)) {
-          min.collected = true;
-          if (min.type === 'titanium') inventory.titanium++;
-          if (min.type === 'quartz') inventory.quartz++;
-          playCollectSound();
-          updateHUD();
-        }
-      }
-    });
-
-    peepers.forEach((p) => {
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-      if (p.y < 60 || p.y > 380) p.vy *= -1;
-
-      const d = Math.hypot(player.x - p.x, player.y - p.y);
-      if (d < 22 && keys['e']) {
-        p.x = -200;
-        inventory.peeper++;
-        playCollectSound();
-        updateHUD();
-      }
-    });
-
-    // Reaper Leviathan
-    reaper.x += reaper.vx;
-    if (reaper.x > canvas.width - 70 || reaper.x < 50) reaper.vx *= -1;
-
-    const dReaper = Math.hypot(player.x - reaper.x, player.y - reaper.y);
-    if (dReaper < 50) {
-      hp = Math.max(0, hp - 0.7);
-    }
-  }
-
-  function drawGame() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const isDay = Math.sin(dayNightTimer) > 0;
-
-    // Fundo da Água com Iluminação Dinâmica
-    const waterGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    if (isDay) {
-      waterGrad.addColorStop(0, '#006699');
-      waterGrad.addColorStop(0.4, '#02244a');
-      waterGrad.addColorStop(1, '#010c1c');
-    } else {
-      waterGrad.addColorStop(0, '#001a33');
-      waterGrad.addColorStop(0.4, '#010e21');
-      waterGrad.addColorStop(1, '#00050d');
-    }
-    ctx.fillStyle = waterGrad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Superfície
-    ctx.fillStyle = isDay ? 'rgba(0, 240, 255, 0.45)' : 'rgba(0, 180, 216, 0.2)';
-    ctx.fillRect(0, 0, canvas.width, 36);
-
-    // Fundo Arenoso
-    ctx.fillStyle = '#051424';
-    ctx.beginPath();
-    ctx.moveTo(0, canvas.height - 45);
-    ctx.bezierCurveTo(300, canvas.height - 75, 700, canvas.height - 20, canvas.width, canvas.height - 50);
-    ctx.lineTo(canvas.width, canvas.height);
-    ctx.lineTo(0, canvas.height);
-    ctx.fill();
-
-    // Marine Snow (Plâncton Flutuante)
-    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
-    marineSnow.forEach((s) => {
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fill();
-      s.x += s.speedX;
-      s.y += s.speedY;
-      if (s.y > canvas.height) { s.y = 35; s.x = Math.random() * canvas.width; }
-    });
-
-    // Minerais
-    minerals.forEach((min) => {
-      if (!min.collected) {
-        ctx.fillStyle = min.type === 'titanium' ? '#9ec4e6' : '#00f0ff';
-        ctx.shadowColor = min.type === 'titanium' ? '#9ec4e6' : '#00f0ff';
-        ctx.shadowBlur = isDay ? 6 : 14;
-        ctx.beginPath();
-        ctx.arc(min.x, min.y, min.size / 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-    });
-
-    // Peepers
-    peepers.forEach((p) => {
-      ctx.fillStyle = '#ffaa00';
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y, p.size, p.size / 1.6, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#00f0ff';
-      ctx.beginPath();
-      ctx.arc(p.x + 3 * (p.vx > 0 ? 1 : -1), p.y, 3, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    // Reaper Leviathan
-    ctx.fillStyle = '#ff2a4d';
-    ctx.shadowColor = '#ff2a4d';
-    ctx.shadowBlur = 18;
-    ctx.beginPath();
-    ctx.ellipse(reaper.x, reaper.y, reaper.size, 15, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-
-    // Mergulhador & Lanterna Volumétrica
-    ctx.save();
-    ctx.translate(player.x, player.y);
-
-    const lightCone = ctx.createRadialGradient(
-      player.facing * 15, 0, 5,
-      player.facing * 140, 0, 160
-    );
-    lightCone.addColorStop(0, isDay ? 'rgba(0, 240, 255, 0.4)' : 'rgba(0, 240, 255, 0.7)');
-    lightCone.addColorStop(1, 'transparent');
-    ctx.fillStyle = lightCone;
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.arc(0, 0, 175, player.facing > 0 ? -0.35 : Math.PI - 0.35, player.facing > 0 ? 0.35 : Math.PI + 0.35);
-    ctx.closePath();
-    ctx.fill();
-
-    // Capacete
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(0, 0, player.size / 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#00f0ff';
-    ctx.beginPath();
-    ctx.arc(player.facing * 4, -1, 4, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.restore();
-  }
-
-  function frameLoop() {
-    updateGame();
-    drawGame();
-    requestAnimationFrame(frameLoop);
-  }
-  frameLoop();
-
-  // ------------------------------------------------------------------------
-  // 4. PDA ALTERRA MODAL & FABRICADOR
-  // ------------------------------------------------------------------------
-  const pdaModal = document.getElementById('pda-modal');
-  const btnClosePda = document.getElementById('btn-close-pda');
-  const triggerPdaBtns = document.querySelectorAll('.trigger-pda');
-
-  function togglePDA() {
-    const isOpen = pdaModal.classList.contains('open');
-    if (isOpen) {
-      pdaModal.classList.remove('open');
-      pdaModal.setAttribute('aria-hidden', 'true');
-    } else {
-      pdaModal.classList.add('open');
-      pdaModal.setAttribute('aria-hidden', 'false');
-      playSonar();
-      speakAlterraAI("PDA interface accessed.");
-      updateHUD();
-    }
-  }
-
-  if (btnClosePda) btnClosePda.addEventListener('click', togglePDA);
-  triggerPdaBtns.forEach((btn) => btn.addEventListener('click', togglePDA));
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && pdaModal.classList.contains('open')) togglePDA();
-  });
-
-  const tabBtns = document.querySelectorAll('.pda-tab-btn');
-  const tabPanes = document.querySelectorAll('.pda-pane');
-
-  tabBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach((b) => b.classList.remove('active'));
-      tabPanes.forEach((p) => p.classList.remove('active'));
-
-      btn.classList.add('active');
-      const target = document.getElementById(btn.dataset.tab);
-      if (target) target.classList.add('active');
-    });
-  });
-
-  // Ações do Fabricador
-  const craftBtns = document.querySelectorAll('.btn-craft');
-  const craftStatus = document.getElementById('craft-status');
-
-  craftBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const item = btn.dataset.item;
-      let success = false;
-
-      if (item === 'tank') {
-        if (inventory.titanium >= 2) {
-          inventory.titanium -= 2;
-          inventory.tanks++;
-          maxO2 += 50;
-          o2 = maxO2;
-          success = true;
-          craftStatus.textContent = '✓ Tanque O₂ Fabricado! (+50 Oxigênio Máximo)';
-          speakAlterraAI("Oxygen tank fabricated.");
-        } else {
-          craftStatus.textContent = '✕ Titânio insuficiente (Precisa de 2x).';
-        }
-      } else if (item === 'knife') {
-        if (inventory.titanium >= 1 && inventory.quartz >= 1 && !inventory.hasKnife) {
-          inventory.titanium -= 1;
-          inventory.quartz -= 1;
-          inventory.hasKnife = true;
-          success = true;
-          craftStatus.textContent = '✓ Faca de Sobrevivência Pronta!';
-          speakAlterraAI("Survival knife equipped.");
-        } else {
-          craftStatus.textContent = inventory.hasKnife ? '✕ Faca já fabricada.' : '✕ Recursos insuficientes.';
-        }
-      } else if (item === 'seaglide') {
-        if (inventory.titanium >= 3 && inventory.quartz >= 2 && !inventory.hasSeaglide) {
-          inventory.titanium -= 3;
-          inventory.quartz -= 2;
-          inventory.hasSeaglide = true;
-          success = true;
-          craftStatus.textContent = '✓ Seaglide Ativado (+55% Velocidade)!';
-          speakAlterraAI("Seaglide propulsion online.");
-        } else {
-          craftStatus.textContent = inventory.hasSeaglide ? '✕ Seaglide já instalado.' : '✕ Recursos insuficientes.';
-        }
-      } else if (item === 'food') {
-        if (inventory.peeper >= 1) {
-          inventory.peeper -= 1;
-          hp = Math.min(100, hp + 40);
-          success = true;
-          craftStatus.textContent = '✓ Peeper Cozido com Sucesso!';
-          speakAlterraAI("Caloric intake optimal.");
-        } else {
-          craftStatus.textContent = '✕ Nenhum Peeper no inventário.';
-        }
-      }
-
-      if (success) {
-        craftStatus.style.color = '#00ffa2';
-        playCraftSound();
-      } else {
-        craftStatus.style.color = '#ff7800';
-      }
-
-      updateHUD();
-    });
-  });
-
-  // ------------------------------------------------------------------------
-  // 5. MODAL DE TRAILER & LIGHTBOX DE GALERIA
-  // ------------------------------------------------------------------------
-  const trailerModal = document.getElementById('trailer-modal');
-  const btnWatchTrailer = document.getElementById('btn-watch-trailer');
-  const btnCloseTrailer = document.getElementById('btn-close-trailer');
-  const trailerIframe = document.getElementById('trailer-iframe');
-
-  if (btnWatchTrailer) {
-    btnWatchTrailer.addEventListener('click', () => {
-      trailerIframe.src = "https://www.youtube.com/embed/rP3fn6Q-Yq0?autoplay=1";
-      trailerModal.classList.add('open');
-      trailerModal.setAttribute('aria-hidden', 'false');
-    });
-  }
-
-  if (btnCloseTrailer) {
-    btnCloseTrailer.addEventListener('click', () => {
-      trailerIframe.src = "";
-      trailerModal.classList.remove('open');
-      trailerModal.setAttribute('aria-hidden', 'true');
-    });
-  }
-
-  // Lightbox
-  const lightboxModal = document.getElementById('lightbox-modal');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxCaption = document.getElementById('lightbox-caption');
-  const btnCloseLightbox = document.getElementById('btn-close-lightbox');
-  const galleryItems = document.querySelectorAll('.gallery-item');
-
-  galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
-      lightboxImg.src = item.dataset.full;
-      lightboxCaption.textContent = item.dataset.title;
-      lightboxModal.classList.add('open');
-    });
-  });
-
-  if (btnCloseLightbox) {
-    btnCloseLightbox.addEventListener('click', () => lightboxModal.classList.remove('open'));
-  }
-
-  // Scroll to top
-  const btnScroll = document.getElementById('btn-scroll-top');
-  if (btnScroll) {
-    btnScroll.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  }
-
-  // Botão Jogue Agora
-  const btnHeroPlay = document.getElementById('btn-hero-play');
-  if (btnHeroPlay) {
-    btnHeroPlay.addEventListener('click', () => {
-      document.getElementById('simulador-section').scrollIntoView({ behavior: 'smooth' });
-    });
-  }
 });
 
-// --------------------------------------------------------------------------
-// 6. ARQUITETO DE BASE
-// --------------------------------------------------------------------------
-const baseState = { room: 1, window: 2, reinforce: 1, power: 2 };
-
-window.alterModule = function(type, delta) {
-  baseState[type] = Math.max(0, baseState[type] + delta);
-  document.getElementById(`count-${type}`).textContent = baseState[type];
-
-  const integrity = (10 + (baseState.reinforce * 7.0) - (baseState.room * 1.2) - (baseState.window * 1.0)).toFixed(1);
-  const totalEnergy = baseState.power * 50;
-
-  const intElem = document.getElementById('base-integrity');
-  const msgElem = document.getElementById('base-status-msg');
-
-  intElem.textContent = integrity;
-  document.getElementById('base-energy').textContent = `${totalEnergy} / ${totalEnergy}`;
-
-  if (parseFloat(integrity) <= 0) {
-    intElem.className = 'neon-red';
-    msgElem.textContent = '⚠ ALERTA CRÍTICO: RUPTURA DE CASCO IMINENTE!';
-  } else {
-    intElem.className = 'neon-green';
-    msgElem.textContent = 'Casco Estável // Sem Risco de Inundação';
+/* ==========================================================================
+   2. CRIATURAS
+   Só identifico pelo nome o que dá para reconhecer com segurança na imagem;
+   o resto fica com descrição da cena.
+   ========================================================================== */
+const criaturas = [
+  {
+    nome: 'Reaper Leviathan', tipo: 'Leviatã · hostil',
+    img: SHOT('264710', '883a98ad56021ce409219e1b749818866b6115cd'),
+    alt: 'Reaper Leviathan, criatura gigante de mandíbulas abertas, diante de um traje Prawn',
+    texto: 'O predador mais conhecido da série. Anuncia-se por um rugido que se ouve muito antes de aparecer — e é justamente o som que torna o encontro assustador.'
+  },
+  {
+    nome: 'Fauna bioluminescente', tipo: 'Passiva',
+    img: SHOT('264710', '5f2f2ea498cdc632cbffd6cf37c1a09670eb3272'),
+    alt: 'Criatura de grande porte coberta de pontos bioluminescentes nadando sobre o recife',
+    texto: 'Boa parte da vida de 4546B brilha no escuro. Nem tudo que é enorme é perigoso: existem gigantes completamente pacíficos.'
+  },
+  {
+    nome: 'Predadores das algas', tipo: 'Hostil · médio porte',
+    img: SHOT('264710', 'b28404f3d108cc15aebbb2c3d7cb17e587225662'),
+    alt: 'Criatura predadora entre algas gigantes na floresta de kelp',
+    texto: 'Na floresta de algas a visibilidade é curta e o ataque quase sempre vem de fora do campo de visão. É o primeiro susto de verdade da maioria dos jogadores.'
   }
-};
+];
+
+document.getElementById('creatureGrid').innerHTML = criaturas.map((c, i) => `
+  <article class="card reveal" style="--i:${i}; overflow:hidden">
+    <div class="media scrim" style="aspect-ratio:16/10">
+      <img src="${c.img}" alt="${c.alt}" loading="lazy">
+    </div>
+    <div style="padding:1.6rem">
+      <span class="t-label" style="color:var(--cyan-dim); display:block; margin-bottom:0.4rem">${c.tipo}</span>
+      <h3 class="t-h3 font-ui" style="margin-bottom:0.6rem">${c.nome}</h3>
+      <p style="font-size:0.94rem; color:var(--muted); margin:0">${c.texto}</p>
+    </div>
+  </article>
+`).join('');
+
+/* ==========================================================================
+   3. VEÍCULOS
+   ========================================================================== */
+const veiculos = [
+  {
+    nome: 'Seamoth', prof: 'até ~900 m com atualizações',
+    img: SHOT('264710', 'e182b6b20bb797500f9f63c561586d920d44e37c'),
+    alt: 'Seamoth, submarino pequeno de um ocupante, sobre um recife colorido',
+    texto: 'Submarino pequeno e rápido, para um ocupante. É o primeiro passo para sair da zona rasa com alguma segurança.'
+  },
+  {
+    nome: 'Prawn Suit', prof: 'até ~1700 m com atualizações',
+    img: SHOT('264710', '970a13f246e33e0df26d93baf9f8e975732adb4b'),
+    alt: 'Traje Prawn, exoesqueleto de mineração, dentro de uma caverna de lava',
+    texto: 'Um exoesqueleto que anda no fundo em vez de nadar. Perfura rocha, resiste à pressão extrema e é o que leva o jogador à zona de lava.'
+  },
+  {
+    nome: 'Cyclops', prof: 'até ~1700 m com atualizações',
+    img: SHOT('264710', '9fdfcc7572ae22b4afa21e6de3b23c962ca5bb55'),
+    alt: 'Cyclops, submarino grande, navegando sobre o fundo do oceano',
+    texto: 'Submarino grande o bastante para servir de base móvel: guarda veículos menores, tem fabricador dentro e faz barulho suficiente para atrair leviatãs.'
+  }
+];
+
+document.getElementById('vehicleGrid').innerHTML = veiculos.map((v, i) => `
+  <article class="card reveal" style="--i:${i}; overflow:hidden">
+    <div class="media scrim" style="aspect-ratio:16/10">
+      <img src="${v.img}" alt="${v.alt}" loading="lazy">
+    </div>
+    <div style="padding:1.6rem">
+      <h3 class="t-h3 font-ui" style="margin-bottom:0.3rem">${v.nome}</h3>
+      <span class="t-label" style="color:var(--cyan-dim); display:block; margin-bottom:0.7rem">${v.prof}</span>
+      <p style="font-size:0.94rem; color:var(--muted); margin:0">${v.texto}</p>
+    </div>
+  </article>
+`).join('');
+
+/* ==========================================================================
+   4. GALERIA
+   ========================================================================== */
+const galeria = [
+  { img: SHOT('264710', '623579a6693f6fc48033e619cacc4306f10eef15'), cap: 'Recifes rasos e a primeira base' },
+  { img: SHOT('264710', 'cebc378d2f7bc78978c21db4e3c5e12ccd067349'), cap: 'Habitat submarino de vários módulos' },
+  { img: SHOT('264710', '0ace7f8b4350b8fbdd16345a76bc30545256e918'), cap: 'Caverna profunda com vida bioluminescente' },
+  { img: SHOT('264710', 'f0eeabe108c2bc2b3e370b9828fb280035b50db2'), cap: 'Interior de um submarino em imersão' },
+  { img: SHOT('848450', '5011daad83f8494eda0826e4bbc91181239ad5d7'), cap: 'Below Zero · vida sob o gelo' },
+  { img: SHOT('848450', '9e3d6ab0db5442f7bcbeb923da47d3a80023f50f'), cap: 'Below Zero · superfície congelada' }
+];
+
+document.getElementById('galleryGrid').innerHTML = galeria.map(g => `
+  <figure class="gallery-item" data-full="${g.img}" data-cap="${g.cap}" role="button" tabindex="0"
+          aria-label="Ampliar: ${g.cap}" style="margin:0">
+    <img src="${g.img}" alt="${g.cap}" loading="lazy">
+    <figcaption>${g.cap}</figcaption>
+  </figure>
+`).join('');
+
+/* Ampliação */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxCap = document.getElementById('lightboxCaption');
+
+function abrirAmpliacao(item) {
+  lightboxImg.src = item.dataset.full;
+  lightboxImg.alt = item.dataset.cap;
+  lightboxCap.textContent = item.dataset.cap;
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden', 'false');
+}
+function fecharAmpliacao() {
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden', 'true');
+}
+
+document.querySelectorAll('.gallery-item').forEach(item => {
+  item.addEventListener('click', () => abrirAmpliacao(item));
+  item.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirAmpliacao(item); }
+  });
+});
+document.getElementById('lightboxClose').addEventListener('click', fecharAmpliacao);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) fecharAmpliacao(); });
+window.addEventListener('keydown', e => { if (e.key === 'Escape') fecharAmpliacao(); });
+
+/* ==========================================================================
+   5. OS TRÊS JOGOS
+   ========================================================================== */
+const jogos = [
+  {
+    nome: 'Subnautica', ano: '2018',
+    img: SHOT('264710', '623579a6693f6fc48033e619cacc4306f10eef15'),
+    alt: 'Recife raso de Subnautica',
+    texto: 'O original. Um sobrevivente, o oceano de 4546B e a descoberta de por que ninguém pode sair do planeta.'
+  },
+  {
+    nome: 'Below Zero', ano: '2021',
+    img: SHOT('848450', '9e3d6ab0db5442f7bcbeb923da47d3a80023f50f'),
+    alt: 'Paisagem congelada de Subnautica Below Zero',
+    texto: 'Passado dois anos depois, na região ártica do mesmo planeta. Traz seções na superfície, no gelo, além do mergulho.'
+  },
+  {
+    nome: 'Subnautica 2', ano: '2026 · acesso antecipado',
+    img: SHOT2('1962700', '823b102b09530bbf588f5e9752cb52f1681dc992'),
+    alt: 'Base submarina em Subnautica 2',
+    texto: 'Um mundo alienígena inteiramente novo, e a maior mudança da série: dá para jogar sozinho ou em cooperativo de até quatro pessoas.'
+  }
+];
+
+document.getElementById('gamesGrid').innerHTML = jogos.map((j, i) => `
+  <article class="card reveal" style="--i:${i}; overflow:hidden">
+    <div class="media scrim" style="aspect-ratio:16/9">
+      <img src="${j.img}" alt="${j.alt}" loading="lazy">
+    </div>
+    <div style="padding:1.6rem">
+      <span class="t-label" style="color:var(--cyan-dim); display:block; margin-bottom:0.4rem">${j.ano}</span>
+      <h3 class="t-h3 font-ui" style="margin-bottom:0.6rem">${j.nome}</h3>
+      <p style="font-size:0.94rem; color:var(--muted); margin:0">${j.texto}</p>
+    </div>
+  </article>
+`).join('');
+
+/* ==========================================================================
+   6. REVELAÇÃO AO ROLAR
+   Registrada por função: as fichas acima são criadas por script e precisam
+   entrar na mesma observação, senão nasceriam invisíveis.
+   ========================================================================== */
+const revelador = new IntersectionObserver(entradas => {
+  entradas.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('on');
+    revelador.unobserve(e.target);
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+function observarRevelacoes(raiz = document) {
+  raiz.querySelectorAll('.reveal').forEach(el => revelador.observe(el));
+}
+observarRevelacoes();
+
+/* ==========================================================================
+   7. RÉGUA DE PROFUNDIDADE (NAVEGAÇÃO)
+   Em vez de uma barra no topo, a navegação é a própria escala de mergulho:
+   cada seção ocupa uma profundidade e o cursor desce junto com a leitura.
+   ========================================================================== */
+const PROFUNDIDADE_MAX = 1700;
+
+const paradas = [
+  { id: 'topo',          nome: 'Superfície',    m: 0 },
+  { id: 'historia',      nome: 'A Aurora',      m: 120 },
+  { id: 'profundidade',  nome: 'Profundidade',  m: 340 },
+  { id: 'criaturas',     nome: 'Criaturas',     m: 600 },
+  { id: 'sobrevivencia', nome: 'Sobrevivência', m: 900 },
+  { id: 'veiculos',      nome: 'Veículos',      m: 1200 },
+  { id: 'galeria',       nome: 'Galeria',       m: 1450 },
+  { id: 'jogos',         nome: 'Os jogos',      m: 1700 }
+];
+
+const railScale = document.getElementById('railScale');
+const railCursor = document.getElementById('railCursor');
+const depthVal = document.getElementById('depthVal');
+
+railScale.insertAdjacentHTML('beforeend', paradas.map(p => `
+  <a class="rail-stop" href="#${p.id}" data-sec="${p.id}">
+    ${p.nome}<span class="m">${p.m} m</span>
+  </a>
+`).join(''));
+
+const stops = [...railScale.querySelectorAll('.rail-stop')];
+
+/* Leitura de profundidade e escurecimento do fundo acompanham a rolagem */
+const toTop = document.getElementById('toTop');
+let ticking = false;
+
+function atualizarProfundidade() {
+  const percorrivel = document.documentElement.scrollHeight - window.innerHeight;
+  const progresso = percorrivel > 0 ? Math.min(window.scrollY / percorrivel, 1) : 0;
+
+  depthVal.textContent = Math.round(progresso * PROFUNDIDADE_MAX);
+  // Alimenta o degradê do fundo: 0 na superfície, 1 no abismo
+  document.documentElement.style.setProperty('--depth', progresso.toFixed(3));
+
+  // O cursor percorre a mesma fração da altura da régua
+  const trilho = railScale.getBoundingClientRect().height;
+  if (trilho > 0) railCursor.style.top = `${progresso * trilho}px`;
+
+  toTop.classList.toggle('show', window.scrollY > 700);
+  ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(atualizarProfundidade);
+}, { passive: true });
+
+window.addEventListener('resize', atualizarProfundidade);
+atualizarProfundidade();
+
+toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* Marca a parada correspondente à seção que está sendo lida */
+const observadorSecao = new IntersectionObserver(entradas => {
+  entradas.forEach(e => {
+    if (!e.isIntersecting) return;
+    stops.forEach(s => s.classList.toggle('active', s.dataset.sec === e.target.id));
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+
+document.querySelectorAll('main section[id]').forEach(s => observadorSecao.observe(s));
+
+/* Nas telas estreitas a escala vira um painel que abre */
+const railToggle = document.getElementById('railToggle');
+
+railToggle.addEventListener('click', () => {
+  const abrindo = !railScale.classList.contains('open');
+  railScale.classList.toggle('open', abrindo);
+  railToggle.setAttribute('aria-expanded', String(abrindo));
+  railToggle.textContent = abrindo ? 'FECHAR' : 'ESCALA';
+});
+
+stops.forEach(s => s.addEventListener('click', () => {
+  railScale.classList.remove('open');
+  railToggle.setAttribute('aria-expanded', 'false');
+  railToggle.textContent = 'ESCALA';
+}));
+
+/* ==========================================================================
+   8. PARTÍCULAS SUSPENSAS NA ÁGUA
+   ========================================================================== */
+const canvas = document.getElementById('motes');
+if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const ctx = canvas.getContext('2d');
+  let particulas = [];
+  let raf = null;
+
+  function dimensionar() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const qtd = Math.min(60, Math.floor(window.innerWidth / 26));
+    particulas = Array.from({ length: qtd }, () => criar(true));
+  }
+
+  function criar(inicial) {
+    return {
+      x: Math.random() * canvas.width,
+      y: inicial ? Math.random() * canvas.height : canvas.height + 8,
+      r: 0.5 + Math.random() * 1.6,
+      vy: 0.1 + Math.random() * 0.35,
+      vx: (Math.random() - 0.5) * 0.18,
+      a: 0.15 + Math.random() * 0.35,
+      fase: Math.random() * Math.PI * 2
+    };
+  }
+
+  function desenhar(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particulas.forEach((p, i) => {
+      const pulso = 0.6 + 0.4 * Math.sin(t / 1100 + p.fase);
+      ctx.fillStyle = `rgba(150, 230, 255, ${p.a * pulso})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      p.y -= p.vy;
+      p.x += p.vx + Math.sin(t / 1800 + p.fase) * 0.1;
+      if (p.y < -8) particulas[i] = criar(false);
+    });
+    raf = requestAnimationFrame(desenhar);
+  }
+
+  dimensionar();
+  raf = requestAnimationFrame(desenhar);
+  window.addEventListener('resize', dimensionar);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
+    else if (!raf) raf = requestAnimationFrame(desenhar);
+  });
+}

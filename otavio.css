@@ -592,7 +592,8 @@ h1, h2, h3, .logo-text, .btn, .hero-title {
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
+  /* 4 colunas: a última é a navegação entre as páginas do projeto */
+  grid-template-columns: 1.5fr 1fr 1fr 1.1fr;
   gap: 40px;
   padding-bottom: 50px;
 }
@@ -691,3 +692,26 @@ h1, h2, h3, .logo-text, .btn, .hero-title {
   .btn { padding: 14px 22px; font-size: 0.65rem; }
   .section-title { font-size: 1.3rem; }
 }
+
+/* ===================== BOTÃO DE VOLTA AO HUB =====================
+   Feito como um bloco do jogo: relevo claro em cima, sombra embaixo,
+   igual aos slots de inventário usados no resto da página. */
+.nav-hub {
+  display: inline-block;
+  padding: 10px 14px;
+  margin-left: 6px;
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  color: var(--c-bg);
+  background: var(--c-forest-light);
+  border-radius: var(--radius-block);
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.3),
+    inset -2px -2px 0 rgba(0,0,0,0.35);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.nav-hub:hover {
+  background: var(--c-gold);
+  transform: translateY(-2px);
+}
+.nav-hub:active { transform: translateY(1px); }

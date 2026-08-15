@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ==========================================================================
+   HUB DO PROJETO
+   Identidade própria, de propósito: as cinco páginas têm temas fortes e
+   opostos, então o hub fica neutro para não competir com nenhuma delas.
+   ========================================================================== */
+:root {
+  --void: #08080d;
+  --panel: #0f0f18;
+  --panel-2: #14141f;
+  --line: #21212f;
+  --line-soft: #191924;
+
+  --ink: #eceaf5;
+  --muted: #a09eb8;
+  --dim: #6b6a80;
+
+  --violet: #7c5cff;
+  --cyan: #34d0d8;
+  --pink: #ff4d8d;
+  --amber: #ffb347;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.075rem);
+  line-height: 1.75;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   TIPOGRAFIA
+   ========================================================================== */
+.font-d {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.t-hero { font-size: clamp(2.6rem, 1.2rem + 6vw, 6.5rem); }
+.t-h2   { font-size: clamp(2rem, 1.3rem + 2.8vw, 3.6rem); }
+.t-h3   { font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem); letter-spacing: -0.01em; }
+
+.t-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.measure    { max-width: 66ch; }
+.measure-sm { max-width: 52ch; }
+
+.lede {
+  font-size: clamp(1.1rem, 1rem + 0.55vw, 1.45rem);
+  line-height: 1.6;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+/* Texto com o degradê da aurora, usado só nos títulos-chave */
+.grad {
+  background: linear-gradient(100deg, var(--violet) 0%, var(--cyan) 45%, var(--pink) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ==========================================================================
+   AURORA DE FUNDO
+   Três manchas de cor que giram devagar — dá vida sem pesar como vídeo.
+   ========================================================================== */
+.aurora {
+  position: fixed;
+  inset: -30% -10%;
+  z-index: -2;
+  pointer-events: none;
+  filter: blur(90px);
+  opacity: 0.42;
+}
+.aurora span {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+}
+.aurora .a1 {
+  width: 46vw; height: 46vw; left: 4%; top: 8%;
+  background: radial-gradient(circle, var(--violet), transparent 66%);
+  animation: drift1 26s ease-in-out infinite;
+}
+.aurora .a2 {
+  width: 40vw; height: 40vw; right: 6%; top: 22%;
+  background: radial-gradient(circle, var(--cyan), transparent 66%);
+  animation: drift2 32s ease-in-out infinite;
+}
+.aurora .a3 {
+  width: 34vw; height: 34vw; left: 38%; bottom: 6%;
+  background: radial-gradient(circle, var(--pink), transparent 66%);
+  animation: drift3 29s ease-in-out infinite;
+}
+@keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(9%, 7%) scale(1.14); } }
+@keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1.06); } 50% { transform: translate(-8%, 10%) scale(0.94); } }
+@keyframes drift3 { 0%,100% { transform: translate(0,0) scale(0.96); } 50% { transform: translate(6%, -9%) scale(1.12); } }
+
+/* Grão sobre tudo, para o degradê não ficar com bandas visíveis */
+.grain::before {
+  content: "";
+  position: fixed; inset: 0;
+  z-index: 50; pointer-events: none;
+  opacity: 0.035; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ==========================================================================
+   COMPONENTES
+   ========================================================================== */
+.card {
+  background: linear-gradient(165deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line-soft);
+  transition: border-color 0.5s var(--ease), transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+.card:hover {
+  border-color: var(--line);
+  transform: translateY(-4px);
+  box-shadow: 0 28px 60px -34px rgba(0,0,0,0.9);
+}
+
+.media { position: relative; overflow: hidden; background: var(--panel); }
+.media img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 1s var(--ease), filter 0.6s ease;
+}
+.card:hover .media img { transform: scale(1.06); }
+
+/* Véu que garante leitura do texto sobre qualquer capa de jogo */
+.scrim::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, var(--panel) 3%, rgba(15,15,24,0.82) 34%, rgba(15,15,24,0.12) 72%, transparent 100%);
+}
+
+/* Fio colorido no topo do card, um para cada página */
+.tint { position: absolute; inset: 0 0 auto 0; height: 2px; z-index: 2; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(8,8,13,0.6);
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+.pill:hover { color: var(--ink); border-color: var(--violet); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem; font-weight: 500; letter-spacing: 0.04em;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s var(--ease);
+}
+.btn:hover { background: rgba(124,92,255,0.14); border-color: var(--violet); transform: translateY(-2px); }
+
+.rule { height: 1px; background: linear-gradient(to right, var(--line), transparent); border: 0; }
+
+.nav-link { position: relative; }
+.nav-link::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: -6px; height: 1px;
+  background: linear-gradient(to right, var(--violet), var(--cyan));
+  transition: right 0.45s var(--ease);
+}
+.nav-link:hover::after, .nav-link.active::after { right: 0; }
+
+/* ==========================================================================
+   REVELAÇÃO AO ROLAR
+   Só esconde quando há JS — sem script a página continua legível.
+   ========================================================================== */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.js .reveal.on { opacity: 1; transform: none; }
+
+:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+::selection { background: rgba(124,92,255,0.4); color: #fff; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: var(--line); border: 2px solid var(--void); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--violet); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js .reveal { opacity: 1; transform: none; }
+}
