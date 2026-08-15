@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last of Us — Arquivo de Sobrevivência</title>
+    <meta name="description"
+        content="Página temática sobre The Last of Us: o surto do Cordyceps, a jornada de Joel e Ellie, os estágios da infecção, as facções em guerra e o legado da série.">
+    <meta name="theme-color" content="#0b0a09">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://shared.akamai.steamstatic.com">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#0b0a09', soot: '#121110', char: '#1a1917',
+                        edge: '#2e2c27', edgesoft: '#24221e',
+                        bone: '#e6e1d3', ash: '#a8a294', dust: '#6f6a5e',
+                        spore: '#8a9a5b', sporebright: '#b9cf8a',
+                        ember: '#c2703d', emberbright: '#e0975f',
+                        cold: '#6b8ba4', coldbright: '#9dbcd4',
+                        blood: '#7a1f1f'
+                    },
+                    maxWidth: { shell: '78rem' }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="laura.css">
+
+    <!-- Marca que há JS antes da primeira pintura: as animações de entrada só
+         escondem o conteúdo se houver script para revelá-lo depois. -->
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+
+<body class="grain scanlines">
+
+    <a href="#surto"
+        class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:bg-spore focus:text-void focus:px-4 focus:py-2">
+        Pular para o conteúdo
+    </a>
+
+    <!-- ===================== HEADER ===================== -->
+    <header id="siteHeader"
+        class="fixed top-0 inset-x-0 z-50 transition-all duration-500 border-b border-transparent">
+        <div class="relative max-w-shell mx-auto px-5 sm:px-8 flex items-center justify-between h-16 md:h-20">
+            <a href="#topo" class="font-display t-h4 text-bone hover:text-sporebright transition-colors">
+                TLOU<span class="text-spore">·</span><span class="t-kicker align-middle ml-1 text-ash">arquivo</span>
+            </a>
+
+            <button id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav"
+                class="md:hidden text-bone border border-edge px-3 py-2 t-label">
+                MENU
+            </button>
+
+            <nav id="mainNav" aria-label="Navegação principal"
+                class="hidden md:flex absolute md:static top-16 left-0 right-0 flex-col md:flex-row md:items-center
+                       gap-0 md:gap-7 bg-void md:bg-transparent border-b md:border-0 border-edge px-5 py-3 md:p-0">
+                <a href="#surto" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">Surto</a>
+                <a href="#historia" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">História</a>
+                <a href="#personagens" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">Elenco</a>
+                <a href="#infectados" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">Infectados</a>
+                <a href="#faccoes" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">Facções</a>
+                <a href="#escuta" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">Escuta</a>
+                <a href="#galeria" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">Galeria</a>
+                <a href="#curiosidades" class="nav-link t-kicker py-3 md:py-0 text-ash hover:text-sporebright transition-colors">Arquivo</a>
+
+                <!-- Volta ao hub do projeto -->
+                <a href="index.html" title="Voltar para a página inicial do projeto"
+                    class="nav-hub t-kicker inline-flex items-center gap-1.5 border border-spore text-sporebright
+                           px-3 py-1.5 mt-3 md:mt-0 md:ml-1 hover:bg-spore hover:text-void transition-colors">
+                    <span aria-hidden="true">◂</span> Hub
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ===================== HERO ===================== -->
+        <section id="topo" class="relative min-h-[100svh] flex items-end overflow-hidden">
+            <div class="media scrim-full absolute inset-0">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/library_hero_2x.jpg"
+                    alt="Arte oficial de The Last of Us Part I: Ellie de perfil ao pôr do sol, com a silhueta de Joel caminhando por uma cidade em ruínas"
+                    fetchpriority="high" class="ken-burns" style="object-position: 50% 32%;">
+            </div>
+
+            <div id="sporeField" class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true"></div>
+
+            <div class="relative z-10 max-w-shell mx-auto px-5 sm:px-8 pb-16 md:pb-24 w-full">
+                <p class="t-label text-on-media text-sporebright text-[0.8rem] mb-6 rise inline-flex items-center gap-3"
+                    style="animation-delay: 1.6s">
+                    <span class="w-8 h-px bg-spore" aria-hidden="true"></span>
+                    Zona de quarentena · arquivo de sobrevivência
+                </p>
+
+                <!-- Logo oficial em vez de texto: fidelidade tipográfica real da marca -->
+                <h1 class="flicker-in mb-7">
+                    <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/logo.png"
+                        alt="The Last of Us"
+                        class="w-full max-w-[min(90vw,680px)] h-auto"
+                        style="filter: drop-shadow(0 6px 30px rgba(0,0,0,0.9));">
+                </h1>
+
+                <p class="lede measure-sm text-on-media text-bone/95 mb-8 rise" style="animation-delay: 2s">
+                    Numa América tomada pelo Cordyceps, sobreviver é a parte fácil.
+                    Continuar humano é que é difícil.
+                </p>
+
+                <blockquote
+                    class="font-type text-sm text-on-media text-sporebright border-l border-spore pl-5 rise measure-sm"
+                    style="animation-delay: 2.3s">
+                    “Endure and survive.”
+                    <cite class="block not-italic text-dust text-xs mt-1">— lema dos sobreviventes</cite>
+                </blockquote>
+            </div>
+
+            <a href="#surto" aria-label="Rolar para a próxima seção"
+                class="absolute bottom-7 left-1/2 -translate-x-1/2 z-10 text-sporebright breathe text-2xl leading-none">
+                ↓
+            </a>
+        </section>
+
+        <!-- ===================== 01 · O SURTO ===================== -->
+        <section id="surto" class="py-24 md:py-36 bg-soot">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-16 reveal">
+                    <p class="t-label text-spore mb-4">01 — o mundo</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">O surto do Cordyceps</h2>
+                    <hr class="hairline max-w-xs">
+                </header>
+
+                <div class="grid lg:grid-cols-[1.6fr_1fr] gap-12 lg:gap-16 items-start">
+                    <div class="reveal">
+                        <p class="dropcap measure mb-6">
+                            Na noite de <strong class="text-sporebright font-semibold">26 de setembro de 2013</strong>,
+                            uma mutação do fungo <em>Cordyceps</em> — que no mundo real já controla o corpo de formigas
+                            e outros insetos — passa a infectar seres humanos. O fungo toma o sistema nervoso do
+                            hospedeiro, cresce através da carne e se espalha por esporos e mordidas, derrubando cidades
+                            inteiras em questão de dias.
+                        </p>
+                        <p class="measure text-ash">
+                            Vinte anos depois, o que restou da civilização vive espremido em Zonas de Quarentena
+                            controladas à força pela <strong class="text-bone font-semibold">FEDRA</strong>, a Agência
+                            Federal de Resposta a Desastres. Fora dos muros, o território é terra de ninguém: tomado
+                            por infectados, por saqueadores e por um silêncio que engoliu tudo o que existia antes.
+                        </p>
+                    </div>
+
+                    <aside class="card p-7 reveal" style="--i:1">
+                        <h3 class="t-label text-spore mb-5">Ficha do surto</h3>
+                        <dl class="space-y-4 text-sm">
+                            <div class="flex justify-between gap-4 border-b border-edgesoft pb-3">
+                                <dt class="text-dust">Agente</dt>
+                                <dd class="text-bone text-right">Cordyceps mutado</dd>
+                            </div>
+                            <div class="flex justify-between gap-4 border-b border-edgesoft pb-3">
+                                <dt class="text-dust">Contágio</dt>
+                                <dd class="text-bone text-right">Esporos e mordida</dd>
+                            </div>
+                            <div class="flex justify-between gap-4 border-b border-edgesoft pb-3">
+                                <dt class="text-dust">Marco zero</dt>
+                                <dd class="text-bone text-right">26 / 09 / 2013</dd>
+                            </div>
+                            <div class="flex justify-between gap-4 border-b border-edgesoft pb-3">
+                                <dt class="text-dust">Resposta</dt>
+                                <dd class="text-bone text-right">Lei marcial</dd>
+                            </div>
+                            <div class="flex justify-between gap-4">
+                                <dt class="text-dust">Cura</dt>
+                                <dd class="text-blood text-right font-semibold">Inexistente</dd>
+                            </div>
+                        </dl>
+                    </aside>
+                </div>
+
+                <!-- Linha do tempo -->
+                <div class="mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-edgesoft border border-edgesoft">
+                    <div class="bg-void p-7 reveal" style="--i:0">
+                        <span class="font-display t-h3 text-emberbright block mb-2">2013</span>
+                        <p class="text-sm text-ash">O surto começa. Joel perde a filha, Sarah, na primeira noite do
+                            colapso.</p>
+                    </div>
+                    <div class="bg-void p-7 reveal" style="--i:1">
+                        <span class="font-display t-h3 text-emberbright block mb-2">2033</span>
+                        <p class="text-sm text-ash">Vinte anos depois, Joel atravessa o país escoltando Ellie.</p>
+                    </div>
+                    <div class="bg-void p-7 reveal" style="--i:2">
+                        <span class="font-display t-h3 text-coldbright block mb-2">2038</span>
+                        <p class="text-sm text-ash">Jackson, Wyoming. A vingança de Ellie dá início a <em>Part II</em>.
+                        </p>
+                    </div>
+                    <div class="bg-void p-7 reveal" style="--i:3">
+                        <span class="font-display t-h3 text-dust block mb-2">∞</span>
+                        <p class="text-sm text-ash">Mais de uma década depois do lançamento, ainda sem cura conhecida.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 02 · HISTÓRIA ===================== -->
+        <section id="historia" class="py-24 md:py-36">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-16 reveal">
+                    <p class="t-label text-spore mb-4">02 — a jornada</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">Duas histórias, dois climas</h2>
+                    <p class="lede measure">A direção de arte separa os dois jogos por temperatura: o dourado do
+                        entardecer em <em>Part I</em>, o azul da chuva de Seattle em <em>Part II</em>.</p>
+                </header>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+
+                    <article class="card media-zoom overflow-hidden reveal group">
+                        <div class="media ratio-16-9 scrim-b">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/library_hero_2x.jpg"
+                                alt="Arte oficial de The Last of Us Part I: Ellie ao pôr do sol com Joel ao fundo"
+                                loading="lazy" style="object-position: 50% 40%;">
+                            <div class="absolute bottom-0 left-0 p-7 z-10">
+                                <p class="t-label text-emberbright mb-1">2013 · Naughty Dog</p>
+                                <h3 class="font-display t-h3 text-bone">Part I</h3>
+                            </div>
+                        </div>
+                        <div class="p-7 border-t border-edgesoft">
+                            <p class="text-ash text-sm mb-4">
+                                Joel, um contrabandista endurecido pela perda, é contratado por Marlene, líder dos
+                                <strong class="text-bone">Fireflies</strong>, para levar Ellie — uma garota de 14 anos,
+                                a única pessoa conhecida <strong class="text-sporebright">imune</strong> ao Cordyceps —
+                                até um laboratório em Salt Lake City.
+                            </p>
+                            <p class="text-ash text-sm">
+                                A travessia atravessa zonas de quarentena, cidades tomadas por infectados e
+                                sobreviventes dispostos a tudo, e transforma os dois de estranhos em família. No fim,
+                                diante da escolha entre uma cura incerta e a vida de Ellie, Joel decide por ela — e
+                                mente sobre o que fez.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card media-zoom overflow-hidden reveal group" style="--i:1">
+                        <div class="media ratio-16-9 scrim-b">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/library_hero_2x.jpg"
+                                alt="Arte oficial de The Last of Us Part II: Ellie diante de uma Seattle alagada, com Abby ao fundo"
+                                loading="lazy" style="object-position: 50% 40%;">
+                            <div class="absolute bottom-0 left-0 p-7 z-10">
+                                <p class="t-label text-coldbright mb-1">2020 · Naughty Dog</p>
+                                <h3 class="font-display t-h3 text-bone">Part II</h3>
+                            </div>
+                        </div>
+                        <div class="p-7 border-t border-edgesoft">
+                            <p class="text-ash text-sm mb-4">
+                                Cinco anos depois, Joel e Ellie vivem em Jackson, Wyoming, numa das poucas comunidades
+                                que voltaram a funcionar. Um ato de violência quebra essa paz e lança Ellie numa caçada
+                                por vingança até Seattle, cidade dividida entre duas facções em guerra.
+                            </p>
+                            <p class="text-ash text-sm">
+                                O jogo alterna o ponto de vista entre Ellie e <strong
+                                    class="text-coldbright">Abby</strong>, obrigando o jogador a viver os mesmos dias
+                                pelos dois lados do conflito — e a encarar o preço de seguir o ódio até o fim.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 03 · ELENCO ===================== -->
+        <section id="personagens" class="py-24 md:py-36 bg-soot">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-16 reveal">
+                    <p class="t-label text-spore mb-4">03 — dossiê</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">Quem sobrou</h2>
+                    <p class="lede measure">Fichas reconstruídas a partir de relatos de campo.</p>
+                </header>
+
+                <!-- Protagonistas -->
+                <div class="grid md:grid-cols-3 gap-6 mb-14">
+                    <article class="card media-zoom overflow-hidden reveal">
+                        <div class="media ratio-3-4 scrim-b">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/8e8eb55fe955e6b69f3afa84cd53100b324c5def/ss_8e8eb55fe955e6b69f3afa84cd53100b324c5def.1920x1080.jpg"
+                                alt="Joel Miller segurando um violão em um cômodo escuro" loading="lazy"
+                                style="object-position: 42% 35%;">
+                            <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+                                <p class="t-label text-emberbright mb-1">Contrabandista</p>
+                                <h3 class="font-display t-h3 text-bone">Joel Miller</h3>
+                            </div>
+                        </div>
+                        <p class="p-6 text-sm text-ash border-t border-edgesoft">
+                            Perdeu a filha na primeira noite do surto e passou vinte anos sem deixar ninguém se
+                            aproximar. Escoltar Ellie devolve a ele algo que julgava impossível: uma razão para
+                            continuar.
+                        </p>
+                    </article>
+
+                    <article class="card media-zoom overflow-hidden reveal" style="--i:1">
+                        <div class="media ratio-3-4 scrim-b">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_98b476104b239764ba2a3280b1a9e09a24701041.1920x1080.jpg"
+                                alt="Ellie empunhando um arco em uma paisagem coberta de neve" loading="lazy"
+                                style="object-position: 35% 40%;">
+                            <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+                                <p class="t-label text-sporebright mb-1">Imune</p>
+                                <h3 class="font-display t-h3 text-bone">Ellie Williams</h3>
+                            </div>
+                        </div>
+                        <p class="p-6 text-sm text-ash border-t border-edgesoft">
+                            Nascida já no mundo pós-surto, nunca conheceu outra realidade. Sarcástica, teimosa e
+                            imune ao Cordyceps — a possibilidade de uma cura recai inteira sobre ela.
+                        </p>
+                    </article>
+
+                    <article class="card media-zoom overflow-hidden reveal" style="--i:2">
+                        <div class="media ratio-3-4 scrim-b">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/aa4fa649806500d3403afb0612f03ec1a6283463/ss_aa4fa649806500d3403afb0612f03ec1a6283463.1920x1080.jpg"
+                                alt="Abby apontando uma pistola, com expressão tensa" loading="lazy"
+                                style="object-position: 45% 30%;">
+                            <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+                                <p class="t-label text-coldbright mb-1">Soldado da WLF</p>
+                                <h3 class="font-display t-h3 text-bone">Abby Anderson</h3>
+                            </div>
+                        </div>
+                        <p class="p-6 text-sm text-ash border-t border-edgesoft">
+                            Filha do cirurgião dos Fireflies que Joel matou no hospital. Sua busca por justiça é o
+                            outro lado exato da moeda de <em>Part II</em>.
+                        </p>
+                    </article>
+                </div>
+
+                <!-- Elenco de apoio -->
+                <h3 class="t-label text-spore mb-6 reveal">Elenco de apoio</h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-edgesoft border border-edgesoft">
+                    <div class="bg-void p-6 reveal" style="--i:0">
+                        <h4 class="font-display t-h4 text-bone">Tess</h4>
+                        <p class="t-label text-dust mb-2">Parceira de contrabando</p>
+                        <p class="text-sm text-ash">Sócia de Joel dentro da QZ de Boston. É ela quem força o trato que
+                            dá início a toda a jornada.</p>
+                    </div>
+                    <div class="bg-void p-6 reveal" style="--i:1">
+                        <h4 class="font-display t-h4 text-bone">Tommy</h4>
+                        <p class="t-label text-dust mb-2">Irmão de Joel · Jackson</p>
+                        <p class="text-sm text-ash">Ex-Firefly que deixou a milícia para ajudar a construir uma das
+                            poucas comunidades autossuficientes que restaram.</p>
+                    </div>
+                    <div class="bg-void p-6 reveal" style="--i:2">
+                        <h4 class="font-display t-h4 text-bone">Marlene</h4>
+                        <p class="t-label text-dust mb-2">Líder dos Fireflies</p>
+                        <p class="text-sm text-ash">Velha amiga da mãe de Ellie. Aposta tudo — inclusive a vida da
+                            garota — na promessa de uma cura.</p>
+                    </div>
+                    <div class="bg-void p-6 reveal" style="--i:3">
+                        <h4 class="font-display t-h4 text-bone">Dina</h4>
+                        <p class="t-label text-dust mb-2">Patrulheira de Jackson</p>
+                        <p class="text-sm text-ash">Parceira de patrulha e depois namorada de Ellie. Insiste em
+                            acompanhá-la até Seattle, contra todos os avisos.</p>
+                    </div>
+                    <div class="bg-void p-6 reveal" style="--i:4">
+                        <h4 class="font-display t-h4 text-bone">Riley</h4>
+                        <p class="t-label text-dust mb-2">Melhor amiga · Left Behind</p>
+                        <p class="text-sm text-ash">A amizade que definiu Ellie antes de Joel, revisitada na expansão
+                            <em>Left Behind</em>.</p>
+                    </div>
+                    <div class="bg-void p-6 reveal" style="--i:5">
+                        <h4 class="font-display t-h4 text-bone">Lev</h4>
+                        <p class="t-label text-dust mb-2">Serafita dissidente</p>
+                        <p class="text-sm text-ash">Rompeu com os dogmas dos Serafitas de Seattle. Sua rota cruza com
+                            a de Abby no momento em que os dois mais precisam de ajuda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 04 · INFECTADOS ===================== -->
+        <section id="infectados" class="py-24 md:py-36">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-16 reveal">
+                    <p class="t-label text-spore mb-4">04 — manual de campo</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">Estágios da infecção</h2>
+                    <p class="lede measure">Quanto mais tempo o fungo controla um corpo, mais ele o reconstrói — e
+                        menos sobra de humano ali dentro.</p>
+                </header>
+
+                <!-- Dois destaques com imagem real -->
+                <div class="grid lg:grid-cols-2 gap-6 mb-6">
+                    <article class="card media-zoom overflow-hidden reveal">
+                        <div class="media ratio-16-9 scrim-b">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_412d9b0e95b40f3111b5b7d830c4bf6354ed42a6.1920x1080.jpg"
+                                alt="Um Bloater, infectado em estágio avançado coberto por placas de fungo, atravessando uma porta"
+                                loading="lazy">
+                            <div class="absolute bottom-0 left-0 p-7 z-10">
+                                <p class="t-label text-emberbright mb-1">Estágio avançado</p>
+                                <h3 class="font-display t-h3 text-bone">Bloater</h3>
+                            </div>
+                        </div>
+                        <p class="p-7 text-sm text-ash border-t border-edgesoft">
+                            Anos de infecção endurecem o fungo até formar uma armadura. Lento, mas capaz de arrancar
+                            um sobrevivente ao meio — e de arremessar sacos de esporos à distância.
+                        </p>
+                    </article>
+
+                    <article class="card media-zoom overflow-hidden reveal" style="--i:1">
+                        <div class="media ratio-16-9 scrim-b">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/0549d5b3b556abfea5ea02e2a8937fc986e4eba0/ss_0549d5b3b556abfea5ea02e2a8937fc986e4eba0.1920x1080.jpg"
+                                alt="O Rei Rato: massa de vários infectados fundidos pelo fungo, vista através de uma porta de hospital"
+                                loading="lazy">
+                            <div class="absolute bottom-0 left-0 p-7 z-10">
+                                <p class="t-label text-blood mb-1">Anomalia · Part II</p>
+                                <h3 class="font-display t-h3 text-bone">Rei Rato</h3>
+                            </div>
+                        </div>
+                        <p class="p-7 text-sm text-ash border-t border-edgesoft">
+                            Vários infectados fundidos pelo próprio fungo num único corpo monstruoso, formado ao longo
+                            de décadas no subsolo de um hospital. Um dos encontros mais brutais da série.
+                        </p>
+                    </article>
+                </div>
+
+                <!-- Demais estágios -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-edgesoft border border-edgesoft">
+                    <div class="bg-void p-7 reveal" style="--i:0">
+                        <span class="t-label text-dust">01</span>
+                        <h3 class="font-display t-h4 text-bone mt-2 mb-1">Runner</h3>
+                        <p class="t-label text-spore mb-3">Horas a dias</p>
+                        <p class="text-sm text-ash">Infectados recentes. Ainda enxergam, ainda correm — e ainda
+                            guardam traços assustadoramente humanos.</p>
+                    </div>
+                    <div class="bg-void p-7 reveal" style="--i:1">
+                        <span class="t-label text-dust">02</span>
+                        <h3 class="font-display t-h4 text-bone mt-2 mb-1">Stalker</h3>
+                        <p class="t-label text-spore mb-3">Semanas a meses</p>
+                        <p class="text-sm text-ash">Evitam a luz, espreitam atrás de paredes e atacam de emboscada. O
+                            fungo já começou a tomar o rosto.</p>
+                    </div>
+                    <div
+                        class="clicker-card bg-void p-7 reveal relative overflow-hidden cursor-pointer select-none"
+                        style="--i:2" role="button" tabindex="0"
+                        aria-label="Clicker: clique para simular a ecolocalização">
+                        <span class="t-label text-dust">03</span>
+                        <h3 class="font-display t-h4 text-bone mt-2 mb-1">Clicker</h3>
+                        <p class="t-label text-sporebright mb-3">Clique para ouvir</p>
+                        <p class="text-sm text-ash">Completamente cegos: o fungo consumiu o rosto. “Enxergam” por
+                            ecolocalização — o estalo que dá nome a eles é a última coisa que muita gente ouve.</p>
+                    </div>
+                    <div class="bg-void p-7 reveal" style="--i:3">
+                        <span class="t-label text-dust">04</span>
+                        <h3 class="font-display t-h4 text-bone mt-2 mb-1">Shambler</h3>
+                        <p class="t-label text-spore mb-3">Variante · Part II</p>
+                        <p class="text-sm text-ash">Cresce em ambientes úmidos e libera nuvens de esporos corrosivos
+                            ao se aproximar — ou ao morrer.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 05 · FACÇÕES ===================== -->
+        <section id="faccoes" class="py-24 md:py-36 bg-soot">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-16 reveal">
+                    <p class="t-label text-spore mb-4">05 — território</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">Facções em disputa</h2>
+                    <p class="lede measure">Sem governo, o que sobrou foram grupos — cada um convencido de que a
+                        própria violência é a justificada.</p>
+                </header>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-7 border-l-2 border-l-blood reveal" style="--i:0">
+                        <h3 class="font-display t-h4 text-bone mb-1">FEDRA</h3>
+                        <p class="t-label text-dust mb-3">Militar · zonas de quarentena</p>
+                        <p class="text-sm text-ash">Agência federal que assumiu o controle das cidades muradas. Ordem
+                            mantida à base de toque de recolher, racionamento e execuções sumárias.</p>
+                    </div>
+                    <div class="card p-7 border-l-2 border-l-spore reveal" style="--i:1">
+                        <h3 class="font-display t-h4 text-bone mb-1">Fireflies</h3>
+                        <p class="t-label text-dust mb-3">Milícia · busca pela cura</p>
+                        <p class="text-sm text-ash">Rebeldes que lutam contra a FEDRA e perseguem uma vacina para o
+                            Cordyceps — mesmo que o custo dessa vacina seja alto demais.</p>
+                    </div>
+                    <div class="card p-7 border-l-2 border-l-blood reveal" style="--i:2">
+                        <h3 class="font-display t-h4 text-bone mb-1">Caçadores</h3>
+                        <p class="t-label text-dust mb-3">Saqueadores · Pittsburgh</p>
+                        <p class="text-sm text-ash">Sobreviventes que abandonaram qualquer código: emboscam quem passa
+                            pela cidade por comida, armas e suprimentos.</p>
+                    </div>
+                    <div class="card p-7 border-l-2 border-l-cold reveal" style="--i:3">
+                        <h3 class="font-display t-h4 text-bone mb-1">WLF · Lobos</h3>
+                        <p class="t-label text-dust mb-3">Milícia · Seattle</p>
+                        <p class="text-sm text-ash">Expulsaram a FEDRA de Seattle e hoje travam uma guerra territorial
+                            aberta contra os Serafitas pelo controle da cidade.</p>
+                    </div>
+                    <div class="card p-7 border-l-2 border-l-coldbright reveal" style="--i:4">
+                        <h3 class="font-display t-h4 text-bone mb-1">Serafitas</h3>
+                        <p class="t-label text-dust mb-3">Culto · ilhas de Seattle</p>
+                        <p class="text-sm text-ash">Comunidade religiosa isolacionista, apelidada de “Scars” pelos
+                            Lobos. Seguem uma profeta e rejeitam a tecnologia do velho mundo.</p>
+                    </div>
+                    <div class="card p-7 border-l-2 border-l-blood reveal" style="--i:5">
+                        <h3 class="font-display t-h4 text-bone mb-1">Rattlers</h3>
+                        <p class="t-label text-dust mb-3">Escravizadores · Santa Barbara</p>
+                        <p class="text-sm text-ash">Capturam sobreviventes para trabalho forçado. O último horror que
+                            Ellie encontra no fim de sua jornada.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 06 · MODO ESCUTA ===================== -->
+        <section id="escuta" class="py-24 md:py-36">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-14 reveal">
+                    <p class="t-label text-spore mb-4">06 — mecânica</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">Modo Escuta</h2>
+                    <p class="lede measure">Sem munição para enfrentar todo mundo, Joel e Ellie aprendem a ouvir a
+                        ameaça antes de vê-la: o mundo perde a cor e só o que importa continua legível.</p>
+                </header>
+
+                <div class="grid lg:grid-cols-[1.15fr_1fr] gap-8 items-start">
+
+                    <!-- Demonstração interativa -->
+                    <div class="reveal">
+                        <div id="listenStage" class="listen-stage media ratio-16-9 border border-edge">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_f4829000d3677a9b5b2f234482a7deff12b31ac9.1920x1080.jpg"
+                                alt="Cena de infiltração em um ambiente escuro iluminado por lanterna" loading="lazy">
+                            <span class="listen-pulse" aria-hidden="true"></span>
+                            <span class="listen-ping" aria-hidden="true"></span>
+                            <span class="listen-ping" aria-hidden="true"></span>
+                            <span class="listen-ping" aria-hidden="true"></span>
+                        </div>
+                        <button id="listenToggle" aria-pressed="false" aria-controls="listenStage"
+                            class="btn t-label mt-5">
+                            <span aria-hidden="true">◉</span>
+                            <span id="listenLabel">Ativar Modo Escuta</span>
+                        </button>
+                    </div>
+
+                    <!-- A mecânica real, como aparece no jogo -->
+                    <figure class="reveal" style="--i:1">
+                        <div class="media ratio-16-9 border border-edge">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_1fdb892568d2ea8e8df9810c43e3b4dba8996a51.1920x1080.jpg"
+                                alt="Captura oficial do Modo Escuta Aprimorado em The Last of Us Part I, com silhuetas brilhantes de inimigos através das paredes"
+                                loading="lazy">
+                        </div>
+                        <figcaption class="text-sm text-dust mt-4 border-l border-edge pl-4">
+                            Assim o recurso aparece no jogo: no <strong class="text-ash">Modo Escuta Aprimorado</strong>,
+                            um dos recursos de acessibilidade de <em>Part I</em>, os inimigos surgem como silhuetas
+                            brilhantes mesmo através de paredes e móveis.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 07 · GALERIA ===================== -->
+        <section id="galeria" class="py-24 md:py-36 bg-soot">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-14 reveal">
+                    <p class="t-label text-spore mb-4">07 — registro visual</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">O mundo depois de nós</h2>
+                    <p class="lede measure">A natureza reocupando o concreto é a imagem central da série: bonita e
+                        terrível ao mesmo tempo.</p>
+                </header>
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                    <figure class="media media-zoom ratio-16-9 col-span-2 lg:row-span-2 lg:aspect-auto reveal border border-edgesoft">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_8cd55ab975b2e47f4d4d9a0da4ae6948040ef807.1920x1080.jpg"
+                            alt="Girafas pastando entre prédios abandonados tomados pela vegetação" loading="lazy">
+                    </figure>
+                    <figure class="media media-zoom ratio-16-9 reveal border border-edgesoft" style="--i:1">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_89fffc2857dcae29dee2a09f1be33d745610e19d.1920x1080.jpg"
+                            alt="Cavalos atravessando um campo ao amanhecer" loading="lazy">
+                    </figure>
+                    <figure class="media media-zoom ratio-16-9 reveal border border-edgesoft" style="--i:2">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_e67d2ca76b0c8985a3615afb38c21e893df73272.1920x1080.jpg"
+                            alt="Figura solitária diante de uma avenida deserta sob neblina" loading="lazy">
+                    </figure>
+                    <figure class="media media-zoom ratio-16-9 reveal border border-edgesoft" style="--i:3">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/9b4bd495de40ad942c91cc7302f81d6e9ca4a459/ss_9b4bd495de40ad942c91cc7302f81d6e9ca4a459.1920x1080.jpg"
+                            alt="Vista de Seattle em ruínas ao entardecer, com a roda-gigante ao fundo" loading="lazy">
+                    </figure>
+                    <figure class="media media-zoom ratio-16-9 reveal border border-edgesoft" style="--i:4">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/ebd2126cf786cea9a0c245fe386b7343e368be53/ss_ebd2126cf786cea9a0c245fe386b7343e368be53.1920x1080.jpg"
+                            alt="Cena em um museu abandonado, com uma cápsula espacial e um capacete de astronauta"
+                            loading="lazy">
+                    </figure>
+                    <figure class="media media-zoom ratio-16-9 col-span-2 reveal border border-edgesoft" style="--i:5">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/383de718c5ed47d396bc5e3896e1401aca24b29b/ss_383de718c5ed47d396bc5e3896e1401aca24b29b.1920x1080.jpg"
+                            alt="Confronto armado em uma rua de Seattle tomada pela vegetação" loading="lazy">
+                    </figure>
+                    <figure class="media media-zoom ratio-16-9 reveal border border-edgesoft" style="--i:6">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2531310/05a44fda9f63327b76ec59a561b375ef64d9f7d3/ss_05a44fda9f63327b76ec59a561b375ef64d9f7d3.1920x1080.jpg"
+                            alt="Cavaleiros avançando em direção a um assentamento em chamas" loading="lazy">
+                    </figure>
+                    <figure class="media media-zoom ratio-16-9 reveal border border-edgesoft" style="--i:7">
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_3f1805ecddafacee7f61f87cb8e4624435a83ee3.1920x1080.jpg"
+                            alt="Rua de Boston destruída, com prédios abandonados e veículos enferrujados" loading="lazy">
+                    </figure>
+                </div>
+
+                <p class="t-label text-dust mt-6 reveal">Capturas oficiais · Naughty Dog / Sony Interactive
+                    Entertainment</p>
+            </div>
+        </section>
+
+        <!-- ===================== NÚMEROS ===================== -->
+        <section class="py-24 md:py-32 border-y border-edgesoft">
+            <div class="max-w-shell mx-auto px-5 sm:px-8 grid sm:grid-cols-3 gap-12 text-center">
+                <div class="reveal" style="--i:0">
+                    <p class="font-display t-stat text-emberbright leading-none">
+                        <span class="counter" data-target="200">0</span>+
+                    </p>
+                    <p class="t-label text-ash mt-3">prêmios de GOTY · Part I</p>
+                </div>
+                <div class="reveal" style="--i:1">
+                    <p class="font-display t-stat text-coldbright leading-none">
+                        <span class="counter" data-target="300">0</span>+
+                    </p>
+                    <p class="t-label text-ash mt-3">prêmios de GOTY · Part II</p>
+                </div>
+                <div class="reveal" style="--i:2">
+                    <p class="font-display t-stat text-sporebright leading-none">
+                        <span class="counter" data-target="13">0</span>
+                    </p>
+                    <p class="t-label text-ash mt-3">anos de franquia</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 08 · LEGADO ===================== -->
+        <section id="legado" class="py-24 md:py-36">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-16 reveal">
+                    <p class="t-label text-spore mb-4">08 — legado</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">Além do jogo</h2>
+                </header>
+
+                <div class="grid lg:grid-cols-[1fr_1.1fr] gap-12 items-start">
+                    <ol class="space-y-0">
+                        <li class="flex gap-7 border-b border-edgesoft py-6 reveal" style="--i:0">
+                            <span class="font-display t-h4 text-spore w-16 shrink-0">2014</span>
+                            <p class="text-sm text-ash"><strong class="text-bone">Left Behind</strong> — expansão que
+                                revisita a amizade entre Ellie e Riley antes da jornada com Joel.</p>
+                        </li>
+                        <li class="flex gap-7 border-b border-edgesoft py-6 reveal" style="--i:1">
+                            <span class="font-display t-h4 text-spore w-16 shrink-0">2020</span>
+                            <p class="text-sm text-ash"><strong class="text-bone">Part II</strong> — lançado para PS4,
+                                tornou-se um dos jogos mais premiados da história.</p>
+                        </li>
+                        <li class="flex gap-7 border-b border-edgesoft py-6 reveal" style="--i:2">
+                            <span class="font-display t-h4 text-spore w-16 shrink-0">2022</span>
+                            <p class="text-sm text-ash"><strong class="text-bone">Part I</strong> — reconstrução
+                                completa do original para PS5, trazida ao PC no ano seguinte.</p>
+                        </li>
+                        <li class="flex gap-7 border-b border-edgesoft py-6 reveal" style="--i:3">
+                            <span class="font-display t-h4 text-spore w-16 shrink-0">2023</span>
+                            <p class="text-sm text-ash"><strong class="text-bone">Série da HBO</strong> — estreou em
+                                15 de janeiro com Pedro Pascal e Bella Ramsey, criada por Craig Mazin e Neil Druckmann.
+                            </p>
+                        </li>
+                        <li class="flex gap-7 py-6 reveal" style="--i:4">
+                            <span class="font-display t-h4 text-spore w-16 shrink-0">2025</span>
+                            <p class="text-sm text-ash"><strong class="text-bone">2ª temporada</strong> — estreou em
+                                abril, adaptando os eventos de <em>Part II</em>.</p>
+                        </li>
+                    </ol>
+
+                    <figure class="reveal" style="--i:1">
+                        <div class="media media-zoom ratio-16-9 border border-edge">
+                            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/ss_ec1a71230d4fb477282fa7f25688af37b702ce49.1920x1080.jpg"
+                                alt="Ellie e Riley fazendo caretas dentro de uma cabine de fotos, na expansão Left Behind"
+                                loading="lazy">
+                        </div>
+                        <figcaption class="text-sm text-dust mt-4 border-l border-edge pl-4">
+                            <em>Left Behind</em> mostra Ellie e Riley num shopping abandonado — a sequência que dá
+                            peso a tudo o que Ellie perde depois.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== 09 · ARQUIVO ===================== -->
+        <section id="curiosidades" class="py-24 md:py-36 bg-soot">
+            <div class="max-w-shell mx-auto px-5 sm:px-8">
+
+                <header class="mb-14 reveal">
+                    <p class="t-label text-spore mb-4">09 — arquivo</p>
+                    <h2 class="font-display t-h2 text-bone mb-5">Curiosidades</h2>
+                </header>
+
+                <div class="space-y-3 max-w-3xl">
+                    <details class="card p-6 reveal" style="--i:0">
+                        <summary class="flex justify-between items-center gap-4 t-label text-sporebright">
+                            O Cordyceps existe de verdade?
+                            <span class="chev text-lg" aria-hidden="true">+</span>
+                        </summary>
+                        <p class="text-sm text-ash mt-4">
+                            Sim, como gênero de fungo. Na natureza, espécies como o
+                            <em>Ophiocordyceps unilateralis</em> infectam formigas e alteram seu comportamento até
+                            levá-las a um ponto ideal para a liberação de esporos. A equipe da Naughty Dog cita um
+                            documentário sobre esse fungo como inspiração direta para o jogo.
+                        </p>
+                    </details>
+                    <details class="card p-6 reveal" style="--i:1">
+                        <summary class="flex justify-between items-center gap-4 t-label text-sporebright">
+                            Quem dá vida a Joel e Ellie?
+                            <span class="chev text-lg" aria-hidden="true">+</span>
+                        </summary>
+                        <p class="text-sm text-ash mt-4">
+                            Troy Baker e Ashley Johnson interpretam Joel e Ellie por voz e captura de performance nos
+                            jogos — trabalho amplamente citado como referência de atuação no meio.
+                        </p>
+                    </details>
+                    <details class="card p-6 reveal" style="--i:2">
+                        <summary class="flex justify-between items-center gap-4 t-label text-sporebright">
+                            Por que Part II tem dois protagonistas?
+                            <span class="chev text-lg" aria-hidden="true">+</span>
+                        </summary>
+                        <p class="text-sm text-ash mt-4">
+                            A estrutura alterna Ellie e Abby de propósito: o jogo faz o jogador viver os mesmos três
+                            dias em Seattle pelos dois lados do conflito, para desmontar a ideia de que exista um lado
+                            certo numa espiral de vingança.
+                        </p>
+                    </details>
+                    <details class="card p-6 reveal" style="--i:3">
+                        <summary class="flex justify-between items-center gap-4 t-label text-sporebright">
+                            Por que as girafas são tão lembradas?
+                            <span class="chev text-lg" aria-hidden="true">+</span>
+                        </summary>
+                        <p class="text-sm text-ash mt-4">
+                            Perto do fim de <em>Part I</em>, Joel e Ellie encontram girafas pastando numa cidade
+                            tomada pelo mato. É a única sequência longa do jogo sem ameaça alguma — um respiro que
+                            resume a tese da série: a vida continua, mesmo sem nós.
+                        </p>
+                    </details>
+                    <details class="card p-6 reveal" style="--i:4">
+                        <summary class="flex justify-between items-center gap-4 t-label text-sporebright">
+                            O violão de Joel é só um detalhe?
+                            <span class="chev text-lg" aria-hidden="true">+</span>
+                        </summary>
+                        <p class="text-sm text-ash mt-4">
+                            Não. O violão atravessa <em>Part II</em> como fio condutor entre Joel e Ellie: é o que ele
+                            ensina a ela em Jackson e o objeto ao qual a história retorna no encerramento.
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="border-t border-edge bg-void">
+        <div class="max-w-shell mx-auto px-5 sm:px-8 py-16 grid md:grid-cols-3 gap-12">
+            <div>
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/logo.png"
+                    alt="The Last of Us" loading="lazy" class="w-44 h-auto mb-5 opacity-80">
+                <p class="text-sm text-dust measure-sm">
+                    Página de fã dedicada ao universo de The Last of Us. Não afiliada à Naughty Dog, à Sony
+                    Interactive Entertainment ou à HBO. Artes e capturas oficiais exibidas via Steam, apenas para fins
+                    ilustrativos e educacionais.
+                </p>
+            </div>
+
+            <nav aria-label="Seções">
+                <h3 class="t-label text-spore mb-4">Seções</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#surto" class="link-quiet">O surto</a></li>
+                    <li><a href="#historia" class="link-quiet">História</a></li>
+                    <li><a href="#personagens" class="link-quiet">Elenco</a></li>
+                    <li><a href="#infectados" class="link-quiet">Infectados</a></li>
+                    <li><a href="#faccoes" class="link-quiet">Facções</a></li>
+                    <li><a href="#galeria" class="link-quiet">Galeria</a></li>
+                </ul>
+            </nav>
+
+            <nav aria-label="Outras páginas do projeto">
+                <h3 class="t-label text-spore mb-4">Outras páginas do grupo</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="index.html" class="link-quiet">Início do projeto</a></li>
+                    <li><a href="otavio.html" class="link-quiet">Minecraft — CraftVerse</a></li>
+                    <li><a href="davi.html" class="link-quiet">Página do Davi</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="border-t border-edgesoft">
+            <p class="max-w-shell mx-auto px-5 sm:px-8 py-6 t-label text-dust text-center">
+                &copy; <span id="anoAtual"></span> — página desenvolvida por Laura · projeto de sites em nuvem
+            </p>
+        </div>
+    </footer>
+
+    <button id="backToTop" aria-label="Voltar ao topo"
+        class="fixed bottom-6 right-6 z-40 w-12 h-12 border border-spore text-sporebright bg-void/85 backdrop-blur
+               opacity-0 pointer-events-none transition-all duration-500 hover:bg-spore hover:text-void">
+        ↑
+    </button>
+
+    <script src="laura.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subnautica — O oceano do planeta 4546B</title>
+  <meta name="description"
+    content="Página informativa sobre Subnautica: o naufrágio da Aurora no planeta 4546B, os biomas por profundidade, as criaturas, os veículos e os três jogos da série.">
+  <meta name="theme-color" content="#01040c">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://shared.akamai.steamstatic.com">
+
+  <link rel="stylesheet" href="davi.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+
+<body class="grain">
+
+  <!-- Fundo em camadas: a água clara da superfície some conforme se desce -->
+  <div class="ocean-bg" aria-hidden="true">
+    <span class="surface"></span>
+    <span class="rays"></span>
+    <span class="abyss"></span>
+  </div>
+  <canvas class="motes" id="motes" aria-hidden="true"></canvas>
+
+  <!-- ===================== RÉGUA DE PROFUNDIDADE (NAVEGAÇÃO) ===================== -->
+  <header class="depth-rail" id="depthRail">
+    <a href="#topo" class="rail-brand">SUB<span>NAUTICA</span></a>
+
+    <button class="rail-toggle" id="railToggle" aria-label="Abrir navegação" aria-expanded="false"
+      aria-controls="railScale">ESCALA</button>
+
+    <nav class="rail-scale" id="railScale" aria-label="Seções por profundidade">
+      <span class="rail-cursor" id="railCursor" aria-hidden="true"></span>
+      <!-- as paradas são montadas por davi.js -->
+    </nav>
+
+    <div class="rail-readout">
+      <span class="val" id="depthVal">0</span><span class="lbl">metros</span>
+    </div>
+
+    <a class="btn-pill" href="index.html" title="Voltar para a página inicial do projeto"
+      style="margin-top:1rem; align-self:flex-start">◂ Hub</a>
+  </header>
+
+  <main>
+
+    <!-- ===================== ABERTURA ===================== -->
+    <section id="topo" style="position:relative; min-height:100svh; display:flex; align-items:center;">
+      <div class="media" style="position:absolute; inset:0;">
+        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/ss_623579a6693f6fc48033e619cacc4306f10eef15.1920x1080.jpg"
+          alt="Recife raso iluminado pelo sol no planeta 4546B, com uma base submarina ao fundo" fetchpriority="high">
+        <div style="position:absolute; inset:0; background:
+             radial-gradient(ellipse 70% 50% at 50% 62%, rgba(1,4,12,.86), rgba(1,4,12,.55) 55%, transparent 100%),
+             linear-gradient(180deg, rgba(1,4,12,.75) 0%, transparent 30%, rgba(1,4,12,.9) 92%, var(--abyss) 100%)"></div>
+      </div>
+
+      <div class="shell" style="position:relative; z-index:2;">
+        <p class="t-label neon-cyan reveal" style="margin-bottom:1.4rem">Unknown Worlds &nbsp;·&nbsp; 2018</p>
+        <h1 class="font-hud t-hero reveal" style="--i:1; margin-bottom:1.4rem">
+          SUB<span class="glow">NAUTICA</span>
+        </h1>
+        <p class="lede measure reveal" style="--i:2; margin-bottom:2.2rem; color:var(--ink)">
+          Sua nave caiu num planeta coberto de água. Não há armas, não há resgate e o oxigênio
+          dura pouco mais de um minuto. Tudo o que existe está lá embaixo — e quanto mais fundo,
+          menos luz.
+        </p>
+
+        <div class="reveal" style="--i:3; display:flex; flex-wrap:wrap; gap:0.6rem">
+          <span class="tag">Sobrevivência</span>
+          <span class="tag">Mundo aberto submarino</span>
+          <span class="tag">Planeta 4546B</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HISTÓRIA ===================== -->
+    <section id="historia">
+      <div class="shell">
+        <header class="section-head reveal">
+          <span class="t-label">01 — o naufrágio</span>
+          <h2 class="font-hud t-h2">A queda da Aurora</h2>
+          <hr class="rule" style="max-width:22rem; margin-top:1.2rem">
+        </header>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:3rem; align-items:start">
+          <div class="reveal">
+            <p class="measure" style="margin-top:0">
+              A nave <strong class="neon-cyan">Aurora</strong> atravessava o sistema quando foi atingida por
+              um pulso de energia disparado da superfície e caiu no oceano do planeta
+              <strong class="neon-cyan">4546B</strong>. Você acorda numa cápsula de escape, sozinho,
+              cercado de água em todas as direções.
+            </p>
+            <p class="measure text-muted" style="color:var(--muted)">
+              O que parece um acidente vai se revelando outra coisa. Nos destroços e nas ruínas do fundo
+              do mar há registros de que outra expedição, a <strong style="color:var(--ink)">Degasi</strong>,
+              chegou antes — e não saiu. E há sinais de uma civilização alienígena muito mais antiga que
+              deixou instalações inteiras submersas.
+            </p>
+            <p class="measure" style="color:var(--muted)">
+              A razão do disparo é uma quarentena: o planeta abriga uma bactéria mortal, e nada tem
+              permissão para sair dali. Descobrir isso — e o que fazer a respeito — é a espinha dorsal
+              do jogo.
+            </p>
+          </div>
+
+          <aside class="hud-frame reveal" style="--i:1; padding:2rem">
+            <span class="t-label" style="color:var(--cyan-dim); display:block; margin-bottom:1.4rem">Ficha técnica</span>
+            <dl style="margin:0; display:grid; gap:0.9rem; font-size:0.94rem">
+              <div style="display:flex; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line-soft); padding-bottom:0.7rem">
+                <dt style="color:var(--dim)">Desenvolvedora</dt><dd style="margin:0; text-align:right">Unknown Worlds</dd>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line-soft); padding-bottom:0.7rem">
+                <dt style="color:var(--dim)">Lançamento</dt><dd style="margin:0; text-align:right">23 jan. 2018</dd>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line-soft); padding-bottom:0.7rem">
+                <dt style="color:var(--dim)">Gênero</dt><dd style="margin:0; text-align:right">Sobrevivência / exploração</dd>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line-soft); padding-bottom:0.7rem">
+                <dt style="color:var(--dim)">Cenário</dt><dd style="margin:0; text-align:right">Planeta 4546B</dd>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:1rem">
+                <dt style="color:var(--dim)">Armas de fogo</dt><dd style="margin:0; text-align:right" class="neon-amber">Nenhuma</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PROFUNDIDADE ===================== -->
+    <section id="profundidade" style="background:linear-gradient(180deg, transparent, rgba(5,16,28,.6) 20%, rgba(5,16,28,.6) 80%, transparent)">
+      <div class="shell">
+        <header class="section-head reveal">
+          <span class="t-label">02 — o mundo</span>
+          <h2 class="font-hud t-h2">Perfil de profundidade</h2>
+          <p class="lede measure" style="margin-top:1rem">
+            Em Subnautica, progredir é descer. Cada faixa exige equipamento melhor, e a luz vai
+            sumindo até não sobrar nenhuma. Clique numa faixa para ver o que existe lá.
+          </p>
+        </header>
+
+        <div class="depth-chart reveal" id="depthChart"></div>
+
+        <p style="margin-top:1.2rem; font-size:0.86rem; color:var(--dim)">
+          As profundidades são aproximadas: os biomas se sobrepõem e variam conforme a região do mapa.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== CRIATURAS ===================== -->
+    <section id="criaturas">
+      <div class="shell">
+        <header class="section-head reveal">
+          <span class="t-label">03 — fauna</span>
+          <h2 class="font-hud t-h2">O que vive lá embaixo</h2>
+          <p class="lede measure" style="margin-top:1rem">
+            A vida de 4546B vai do peixe que cabe na mão ao <em>leviatã</em> — a classificação que o
+            jogo dá a criaturas grandes o bastante para engolir um submarino.
+          </p>
+        </header>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:1.4rem" id="creatureGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== SOBREVIVÊNCIA ===================== -->
+    <section id="sobrevivencia" style="background:rgba(5,16,28,.5)">
+      <div class="shell">
+        <header class="section-head reveal">
+          <span class="t-label">04 — regras do jogo</span>
+          <h2 class="font-hud t-h2">Como se sobrevive</h2>
+        </header>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.4rem">
+          <article class="card reveal" style="padding:2rem">
+            <span class="font-hud neon-cyan" style="font-size:1.6rem; display:block; margin-bottom:0.8rem">O₂</span>
+            <h3 class="t-h3 font-ui" style="margin-bottom:0.6rem">Oxigênio</h3>
+            <p style="font-size:0.94rem; color:var(--muted); margin:0">
+              O tanque inicial dura pouco mais de um minuto. Toda descida é uma conta de ida e volta,
+              e tanques maiores só chegam depois de muita coleta.
+            </p>
+          </article>
+
+          <article class="card reveal" style="--i:1; padding:2rem">
+            <span class="font-hud neon-teal" style="font-size:1.6rem; display:block; margin-bottom:0.8rem">⚒</span>
+            <h3 class="t-h3 font-ui" style="margin-bottom:0.6rem">Fabricação</h3>
+            <p style="font-size:0.94rem; color:var(--muted); margin:0">
+              Tudo é construído a partir de recursos coletados no fundo. O scanner é a ferramenta
+              central: apontar para algo desconhecido é como o jogo libera novas receitas.
+            </p>
+          </article>
+
+          <article class="card reveal" style="--i:2; padding:2rem">
+            <span class="font-hud neon-amber" style="font-size:1.6rem; display:block; margin-bottom:0.8rem">⌂</span>
+            <h3 class="t-h3 font-ui" style="margin-bottom:0.6rem">Bases</h3>
+            <p style="font-size:0.94rem; color:var(--muted); margin:0">
+              Dá para erguer habitats no fundo do mar com energia, ar e paredes que precisam aguentar
+              a pressão. Uma base bem posicionada encurta qualquer expedição.
+            </p>
+          </article>
+
+          <article class="card reveal" style="--i:3; padding:2rem">
+            <span class="font-hud" style="font-size:1.6rem; display:block; margin-bottom:0.8rem; color:var(--danger)">✕</span>
+            <h3 class="t-h3 font-ui" style="margin-bottom:0.6rem">Sem armas de fogo</h3>
+            <p style="font-size:0.94rem; color:var(--muted); margin:0">
+              É uma decisão de projeto do estúdio: não existe arma convencional. Contra o que é grande
+              demais, as opções são desviar, esconder-se ou correr.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VEÍCULOS ===================== -->
+    <section id="veiculos">
+      <div class="shell">
+        <header class="section-head reveal">
+          <span class="t-label">05 — tecnologia</span>
+          <h2 class="font-hud t-h2">Veículos</h2>
+          <p class="lede measure" style="margin-top:1rem">
+            Cada veículo abre uma faixa nova de profundidade — e é assim que o mapa vai se
+            desdobrando.
+          </p>
+        </header>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.4rem" id="vehicleGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== GALERIA ===================== -->
+    <section id="galeria" style="background:rgba(5,16,28,.5)">
+      <div class="shell">
+        <header class="section-head reveal">
+          <span class="t-label">06 — registro visual</span>
+          <h2 class="font-hud t-h2">Galeria</h2>
+        </header>
+
+        <div class="gallery-grid reveal" id="galleryGrid"></div>
+
+        <p style="margin-top:1.4rem; font-size:0.82rem; color:var(--dim)">
+          Capturas oficiais · Unknown Worlds Entertainment
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== OS JOGOS ===================== -->
+    <section id="jogos">
+      <div class="shell">
+        <header class="section-head reveal">
+          <span class="t-label">07 — a série</span>
+          <h2 class="font-hud t-h2">Os três jogos</h2>
+        </header>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.4rem" id="gamesGrid"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== AMPLIAÇÃO DE IMAGEM ===================== -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose">✕ Fechar</button>
+    <div>
+      <img id="lightboxImg" src="" alt="">
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
+  </div>
+
+  <button class="to-top" id="toTop" aria-label="Voltar ao topo">▲</button>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer class="site-footer">
+    <div class="shell" style="text-align:center">
+      <p class="font-hud" style="font-size:1.1rem; letter-spacing:0.14em; margin:0 0 0.6rem">
+        SUB<span class="neon-cyan">NAUTICA</span>
+      </p>
+      <p style="font-size:0.9rem; color:var(--dim); max-width:56ch; margin:0 auto">
+        Página informativa feita para trabalho escolar. Não é afiliada à Unknown Worlds Entertainment.
+        Capturas oficiais exibidas via Steam, apenas para fins ilustrativos e educacionais.
+      </p>
+
+      <nav class="footer-project" aria-label="Outras páginas do projeto">
+        <a href="index.html">Início do projeto</a>
+        <a href="laura.html">The Last of Us</a>
+        <a href="otavio.html">Minecraft</a>
+        <a href="apolo.html">Batman: Arkham Knight</a>
+        <a href="pablo.html">Elden Ring</a>
+      </nav>
+    </div>
+    <p class="footer-legal">
+      Subnautica é marca registrada da Unknown Worlds Entertainment. &copy; <span id="ano"></span>
+    </p>
+  </footer>
+
+  <script src="davi.js"></script>
+</body>
+
+</html>

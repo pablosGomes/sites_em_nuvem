@@ -1,0 +1,652 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ==========================================================================
+   SUBNAUTICA — PÁGINA INFORMATIVA
+   Paleta puxada do próprio jogo: o azul-preto das profundezas, o ciano dos
+   painéis da Alterra e o âmbar dos avisos de perigo.
+   ========================================================================== */
+:root {
+  --abyss: #01040c;
+  --deep: #05101c;
+  --panel: #081724;
+  --panel-2: #0c2030;
+  --line: #14384a;
+  --line-soft: #0e2836;
+
+  --cyan: #00f0ff;
+  --cyan-dim: #1aa7bd;
+  --teal: #2ee6a8;
+  --amber: #ffb020;
+  --danger: #ff5a4d;
+
+  --ink: #dcecf2;
+  --muted: #8fb4c4;
+  --dim: #5b8296;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--abyss);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.07rem);
+  line-height: 1.75;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   TIPOGRAFIA
+   ========================================================================== */
+.font-hud { font-family: 'Orbitron', sans-serif; font-weight: 700; letter-spacing: 0.04em; }
+.font-ui  { font-family: 'Rajdhani', sans-serif; font-weight: 600; }
+
+h1, h2, h3 { margin: 0; }
+
+.t-hero { font-size: clamp(2.4rem, 1.2rem + 5.4vw, 5.6rem); line-height: 1.02; letter-spacing: 0.02em; }
+.t-h2   { font-size: clamp(1.8rem, 1.2rem + 2.4vw, 3.1rem); line-height: 1.12; }
+.t-h3   { font-size: clamp(1.1rem, 1rem + 0.55vw, 1.45rem); }
+
+.t-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.measure    { max-width: 66ch; }
+.measure-sm { max-width: 52ch; }
+
+.lede {
+  font-size: clamp(1.05rem, 1rem + 0.5vw, 1.35rem);
+  line-height: 1.65;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+.neon-cyan  { color: var(--cyan); }
+.neon-teal  { color: var(--teal); }
+.neon-amber { color: var(--amber); }
+
+/* Texto ciano com brilho, como os monitores da Alterra */
+.glow {
+  color: var(--cyan);
+  text-shadow: 0 0 14px rgba(0, 240, 255, 0.45);
+}
+
+.shell { width: min(1240px, 92%); margin: 0 auto; }
+
+/* ==========================================================================
+   ATMOSFERA
+   ========================================================================== */
+/* Partículas suspensas na água */
+.motes {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.grain::before {
+  content: "";
+  position: fixed; inset: 0;
+  z-index: 60; pointer-events: none;
+  opacity: 0.03; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ==========================================================================
+   FUNDO OCEÂNICO
+   Duas camadas fixas que se cruzam conforme a rolagem: a página começa na
+   água clara da superfície e vai apagando até o preto do abismo.
+   ========================================================================== */
+.ocean-bg { position: fixed; inset: 0; z-index: -3; pointer-events: none; }
+.ocean-bg span { position: absolute; inset: 0; display: block; }
+
+/* Superfície: azul-turquesa com a luz entrando de cima */
+.ocean-bg .surface {
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -12%, rgba(120, 235, 255, 0.5), transparent 62%),
+    linear-gradient(180deg, #0d5f7a 0%, #073b52 32%, #04212f 68%, #010c14 100%);
+}
+/* Abismo: cobre a superfície conforme --depth cresce */
+.ocean-bg .abyss {
+  background: linear-gradient(180deg, #020a12 0%, #01060d 50%, #000206 100%);
+  opacity: var(--depth, 0);
+}
+
+/* Feixes de luz que encolhem à medida que se desce */
+.ocean-bg .rays {
+  background:
+    linear-gradient(96deg, transparent 42%, rgba(150, 240, 255, 0.07) 46%, transparent 51%),
+    linear-gradient(84deg, transparent 60%, rgba(150, 240, 255, 0.05) 65%, transparent 69%);
+  opacity: calc(1 - var(--depth, 0));
+}
+
+/* ==========================================================================
+   RÉGUA DE PROFUNDIDADE
+   Navegação vertical no lugar da barra no topo: cada seção fica numa
+   profundidade, e o cursor desce junto com a leitura.
+   ========================================================================== */
+.depth-rail {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 210px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem 0 1.4rem 1.6rem;
+  background: linear-gradient(90deg, rgba(1, 4, 12, 0.82) 0%, rgba(1, 4, 12, 0.45) 68%, transparent 100%);
+  backdrop-filter: blur(3px);
+}
+
+.rail-brand {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  text-decoration: none;
+  margin-bottom: 1.8rem;
+}
+.rail-brand span { color: var(--cyan); }
+
+/* A escala em si */
+.rail-scale {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 2.4rem;
+  min-height: 0;
+}
+/* Linha vertical da régua */
+.rail-scale::before {
+  content: "";
+  position: absolute;
+  left: 10px; top: 4px; bottom: 4px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--cyan-dim), rgba(20, 56, 74, 0.5) 70%, transparent);
+  opacity: 0.55;
+}
+
+.rail-stop {
+  position: relative;
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  padding: 0.15rem 0;
+  transition: color 0.35s ease, transform 0.35s var(--ease);
+}
+/* Marca de cada parada, sobre a linha */
+.rail-stop::before {
+  content: "";
+  position: absolute;
+  left: -1.79rem; top: 50%;
+  width: 9px; height: 1px;
+  background: var(--cyan-dim);
+  transform: translateY(-50%);
+  transition: width 0.35s var(--ease), background 0.35s ease;
+}
+.rail-stop .m {
+  display: block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  color: var(--line);
+  letter-spacing: 0.06em;
+  transition: color 0.35s ease;
+}
+.rail-stop:hover { color: var(--muted); }
+.rail-stop:hover::before { width: 14px; }
+
+.rail-stop.active { color: var(--cyan); transform: translateX(3px); }
+.rail-stop.active::before {
+  width: 18px;
+  background: var(--cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+}
+.rail-stop.active .m { color: var(--cyan-dim); }
+
+/* Cursor que desliza pela régua acompanhando a rolagem */
+.rail-cursor {
+  position: absolute;
+  left: 4px;
+  width: 13px; height: 13px;
+  margin-top: -6px;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  background: rgba(0, 240, 255, 0.18);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.55);
+  top: 0;
+  transition: top 0.18s linear;
+  pointer-events: none;
+}
+
+/* Leitura de profundidade ao pé da régua */
+.rail-readout {
+  margin-top: 1.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line-soft);
+}
+.rail-readout .val {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--cyan);
+  text-shadow: 0 0 14px rgba(0, 240, 255, 0.45);
+  line-height: 1;
+}
+.rail-readout .lbl {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: block;
+  margin-top: 0.3rem;
+}
+
+/* Pílula ciano usada no botão de volta ao hub */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.32);
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+.btn-pill:hover {
+  background: rgba(0, 240, 255, 0.2);
+  color: var(--cyan);
+  box-shadow: 0 0 18px -4px rgba(0, 240, 255, 0.6);
+}
+
+/* O conteúdo desvia da régua */
+.shell { margin-left: auto; margin-right: auto; }
+@media (min-width: 1024px) {
+  main, .site-footer { padding-left: 210px; }
+}
+
+/* ==========================================================================
+   SEÇÕES E COMPONENTES
+   ========================================================================== */
+section { padding: clamp(4.5rem, 9vw, 8rem) 0; }
+
+.section-head { margin-bottom: 3.2rem; }
+.section-head .t-label { color: var(--cyan-dim); margin-bottom: 0.9rem; display: block; }
+
+.card {
+  background: linear-gradient(165deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line-soft);
+  transition: border-color 0.45s ease, transform 0.45s var(--ease), box-shadow 0.45s ease;
+}
+.card:hover {
+  border-color: var(--line);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 55px -30px rgba(0, 0, 0, 0.9), 0 0 30px -20px rgba(0, 240, 255, 0.4);
+}
+
+.media { position: relative; overflow: hidden; background: var(--deep); }
+.media img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 1s var(--ease), filter 0.6s ease;
+}
+.card:hover .media img, .media-zoom:hover img { transform: scale(1.05); }
+
+.scrim::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, var(--panel) 3%, rgba(8, 23, 36, 0.8) 32%, transparent 72%);
+}
+
+/* Painel com cantos recortados, no estilo das telas da Alterra */
+.hud-frame {
+  position: relative;
+  border: 1px solid var(--line);
+  background: rgba(8, 23, 36, 0.6);
+}
+.hud-frame::before, .hud-frame::after {
+  content: "";
+  position: absolute;
+  width: 12px; height: 12px;
+  border-color: var(--cyan);
+  border-style: solid;
+  opacity: 0.7;
+}
+.hud-frame::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.hud-frame::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+.tag {
+  display: inline-block;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--line);
+  color: var(--cyan-dim);
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.rule { height: 1px; background: linear-gradient(to right, var(--line), transparent); border: 0; }
+
+/* ==========================================================================
+   PERFIL DE PROFUNDIDADE
+   A mecânica central do jogo é descer: esta seção mostra o que existe em
+   cada faixa e por que cada metro a mais custa mais caro.
+   ========================================================================== */
+.depth-chart {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 0;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #0a2436 0%, #061421 45%, #01060e 100%);
+}
+
+.depth-row {
+  display: contents;
+}
+
+.depth-mark {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.78rem;
+  color: var(--cyan-dim);
+  padding: 1.4rem 0.8rem;
+  border-right: 1px solid var(--line-soft);
+  border-top: 1px solid var(--line-soft);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.depth-body {
+  padding: 1.4rem 1.6rem;
+  border-top: 1px solid var(--line-soft);
+  cursor: pointer;
+  transition: background 0.35s ease;
+}
+.depth-body:hover { background: rgba(0, 240, 255, 0.05); }
+
+.depth-body h3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+
+/* O detalhe só abre quando o visitante clica na faixa */
+.depth-detail {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s var(--ease), opacity 0.4s ease, margin 0.4s ease;
+}
+.depth-body.open .depth-detail {
+  max-height: 220px;
+  opacity: 1;
+  margin-top: 0.7rem;
+}
+
+.depth-danger {
+  display: inline-block;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-left: 0.6rem;
+}
+
+/* ==========================================================================
+   GALERIA
+   ========================================================================== */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.gallery-item {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  cursor: zoom-in;
+  background: var(--deep);
+}
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
+.gallery-item:hover img { transform: scale(1.06); }
+.gallery-item figcaption {
+  position: absolute;
+  inset-inline: 0; bottom: 0;
+  padding: 1.4rem 1rem 0.8rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  background: linear-gradient(to top, rgba(1, 4, 12, 0.92), transparent);
+}
+
+/* Ampliação da imagem */
+.lightbox {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(1, 4, 12, 0.95);
+  display: flex; align-items: center; justify-content: center;
+  padding: 5vh 4vw;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.lightbox.open { opacity: 1; pointer-events: auto; }
+.lightbox img { max-width: 100%; max-height: 80vh; border: 1px solid var(--line); display: block; }
+.lightbox-caption {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 1rem;
+}
+.lightbox-close {
+  position: absolute; top: 2rem; right: 2rem;
+  background: none; border: 1px solid var(--line);
+  color: var(--ink); border-radius: 20px;
+  padding: 8px 16px; cursor: pointer;
+  font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: 0.1em;
+}
+.lightbox-close:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ==========================================================================
+   RODAPÉ
+   ========================================================================== */
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: #010308;
+  padding: 4rem 0 0;
+}
+.footer-project {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 10px 28px;
+  margin: 2.4rem 0 1.6rem;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--line-soft);
+}
+.footer-project a {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.84rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+.footer-project a:hover { color: var(--cyan); text-shadow: 0 0 12px rgba(0, 240, 255, 0.5); }
+
+.footer-legal {
+  font-size: 0.82rem;
+  color: var(--dim);
+  text-align: center;
+  padding-bottom: 2.4rem;
+  margin: 0;
+}
+
+/* Voltar ao topo */
+.to-top {
+  position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 55;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(1, 4, 12, 0.85);
+  color: var(--cyan);
+  cursor: pointer;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease, background 0.3s ease;
+}
+.to-top.show { opacity: 1; pointer-events: auto; }
+.to-top:hover { background: rgba(0, 240, 255, 0.15); }
+
+/* ==========================================================================
+   REVELAÇÃO AO ROLAR
+   Só esconde quando há JS — sem script a página continua legível.
+   ========================================================================== */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transition-delay: calc(var(--i, 0) * 75ms);
+}
+.js .reveal.on { opacity: 1; transform: none; }
+
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+::selection { background: rgba(0, 240, 255, 0.35); color: #fff; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--abyss); }
+::-webkit-scrollbar-thumb { background: var(--line); border: 2px solid var(--abyss); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--cyan-dim); }
+
+/* ==========================================================================
+   RESPONSIVO
+   ========================================================================== */
+/* Botão que abre a régua nas telas estreitas (escondido no desktop) */
+.rail-toggle {
+  display: none;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.32);
+  border-radius: 20px;
+  color: var(--ink);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+@media (max-width: 1023px) {
+  /* A régua vira uma faixa fina no topo: em tela estreita ela roubaria
+     largura demais do conteúdo se continuasse na lateral. */
+  .depth-rail {
+    left: 0; right: 0; bottom: auto;
+    width: auto;
+    height: 58px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0 5%;
+    background: rgba(1, 4, 12, 0.92);
+    border-bottom: 1px solid var(--line);
+  }
+  .rail-brand { margin: 0; font-size: 0.82rem; }
+  .rail-toggle { display: inline-block; }
+
+  /* A escala passa a ser um painel que abre por cima */
+  .rail-scale {
+    position: fixed;
+    left: 0; right: 0; top: 58px;
+    flex: none;
+    background: rgba(1, 4, 12, 0.97);
+    border-bottom: 0 solid var(--line);
+    padding: 0 6% 0 12%;
+    max-height: 0;
+    overflow: hidden;
+    justify-content: flex-start;
+    gap: 0;
+    transition: max-height 0.4s var(--ease), padding 0.4s ease;
+  }
+  .rail-scale.open {
+    /* As 8 paradas somam ~490px: precisa caber sem cortar a última, e ainda
+       assim nunca passar da altura da tela em aparelhos baixos. */
+    max-height: min(560px, calc(100svh - 58px));
+    overflow-y: auto;
+    padding: 1rem 6% 1.2rem 12%;
+    border-bottom-width: 1px;
+  }
+  .rail-scale::before { left: 6%; top: 1rem; bottom: 1.2rem; }
+  .rail-stop { padding: 0.6rem 0; font-size: 0.9rem; }
+  .rail-stop::before { left: calc(-6% - 4px); }
+  .rail-cursor { display: none; }
+
+  /* Leitura de profundidade fica compacta na barra */
+  .rail-readout {
+    margin: 0; padding: 0; border: 0;
+    display: flex; align-items: baseline; gap: 0.4rem;
+    margin-left: auto;
+  }
+  .rail-readout .val { font-size: 1.05rem; }
+  .rail-readout .lbl { margin: 0; font-size: 0.58rem; }
+
+  main, .site-footer { padding-top: 58px; }
+
+  .depth-chart { grid-template-columns: 72px 1fr; }
+  .depth-mark { padding: 1.1rem 0.5rem; font-size: 0.68rem; }
+  .depth-body { padding: 1.1rem 1rem; }
+}
+
+@media (max-width: 560px) {
+  .rail-brand { font-size: 0.72rem; letter-spacing: 0.1em; }
+  .rail-readout .lbl { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js .reveal { opacity: 1; transform: none; }
+  .motes { display: none; }
+}

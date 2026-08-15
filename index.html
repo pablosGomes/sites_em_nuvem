@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundos Jogáveis — Projeto de sites em nuvem</title>
+  <meta name="description"
+    content="Hub do projeto: sobre os jogos, seus benefícios, seus vastos mundos e suas histórias. Reúne as páginas criadas por cada integrante do grupo.">
+  <meta name="theme-color" content="#08080d">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://shared.akamai.steamstatic.com">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#08080d', panel: '#0f0f18', panel2: '#14141f',
+            line: '#21212f', linesoft: '#191924',
+            ink: '#eceaf5', muted: '#a09eb8', dim: '#6b6a80',
+            violet: '#7c5cff', cyan: '#34d0d8', pink: '#ff4d8d', amber: '#ffb347'
+          },
+          maxWidth: { shell: '78rem' }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="index.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+
+<body class="grain">
+
+  <!-- Fundo animado -->
+  <div class="aurora" aria-hidden="true">
+    <span class="a1"></span><span class="a2"></span><span class="a3"></span>
+  </div>
+
+  <a href="#sobre"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-violet focus:text-white focus:px-4 focus:py-2 focus:rounded-full">
+    Pular para o conteúdo
+  </a>
+
+  <!-- ============ NAVEGAÇÃO ============ -->
+  <header id="nav" class="fixed top-0 inset-x-0 z-40 transition-all duration-500 border-b border-transparent">
+    <div class="max-w-shell mx-auto px-5 sm:px-8 h-16 md:h-20 flex items-center justify-between">
+      <a href="#topo" class="font-d text-lg text-ink hover:opacity-80 transition-opacity">
+        Mundos<span class="grad">Jogáveis</span>
+      </a>
+
+      <button id="navToggle" class="md:hidden t-label text-ink border border-line rounded-full px-4 py-2"
+        aria-label="Abrir menu" aria-expanded="false" aria-controls="navMenu">Menu</button>
+
+      <nav id="navMenu" aria-label="Seções"
+        class="hidden md:flex absolute md:static top-16 inset-x-0 flex-col md:flex-row md:items-center gap-0 md:gap-8
+               bg-void md:bg-transparent border-b md:border-0 border-line px-5 py-3 md:p-0">
+        <a href="#sobre" class="nav-link t-label text-muted hover:text-ink py-3 md:py-0 transition-colors">Sobre</a>
+        <a href="#beneficios" class="nav-link t-label text-muted hover:text-ink py-3 md:py-0 transition-colors">Benefícios</a>
+        <a href="#mundos" class="nav-link t-label text-muted hover:text-ink py-3 md:py-0 transition-colors">Mundos</a>
+        <a href="#historias" class="nav-link t-label text-muted hover:text-ink py-3 md:py-0 transition-colors">Histórias</a>
+        <a href="#paginas" class="nav-link t-label text-muted hover:text-ink py-3 md:py-0 transition-colors">Páginas</a>
+        <a href="#projeto" class="nav-link t-label text-muted hover:text-ink py-3 md:py-0 transition-colors">Projeto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ ABERTURA ============ -->
+    <section id="topo" class="relative min-h-[92svh] flex items-center pt-24 pb-16">
+      <div class="max-w-shell mx-auto px-5 sm:px-8 w-full">
+        <p class="t-label text-muted mb-7 reveal">Projeto de sites em nuvem · GitHub</p>
+
+        <h1 class="font-d t-hero mb-8 reveal" style="--i:1">
+          Mundos que<br><span class="grad">só existem</span><br>quando jogados.
+        </h1>
+
+        <p class="lede measure mb-10 reveal" style="--i:2">
+          Um jogo não é só passatempo. É um lugar onde a gente resolve problemas, constrói,
+          erra, tenta de novo — e às vezes se emociona. Este projeto reúne cinco desses mundos,
+          cada um explorado por um integrante do grupo.
+        </p>
+
+        <div class="flex flex-wrap gap-3 reveal" style="--i:3">
+          <a href="#paginas" class="btn">Ver as cinco páginas <span aria-hidden="true">→</span></a>
+          <a href="#beneficios" class="btn">Por que jogos importam</a>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-linesoft border border-linesoft mt-16 reveal"
+          style="--i:4">
+          <div class="bg-void/80 p-5">
+            <p class="font-d text-2xl md:text-3xl text-ink"><span class="counter" data-target="5">0</span></p>
+            <p class="t-label text-dim mt-1">páginas</p>
+          </div>
+          <div class="bg-void/80 p-5">
+            <p class="font-d text-2xl md:text-3xl text-ink"><span class="counter" data-target="5">0</span></p>
+            <p class="t-label text-dim mt-1">integrantes</p>
+          </div>
+          <div class="bg-void/80 p-5">
+            <p class="font-d text-2xl md:text-3xl text-ink"><span class="counter" data-target="5">0</span></p>
+            <p class="t-label text-dim mt-1">branches</p>
+          </div>
+          <div class="bg-void/80 p-5">
+            <p class="font-d text-2xl md:text-3xl text-ink"><span class="counter" data-target="5">0</span></p>
+            <p class="t-label text-dim mt-1">universos</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SOBRE ============ -->
+    <section id="sobre" class="py-24 md:py-36">
+      <div class="max-w-shell mx-auto px-5 sm:px-8">
+        <header class="mb-14 reveal">
+          <p class="t-label text-violet mb-4">01 — o meio</p>
+          <h2 class="font-d t-h2 mb-6">O que um jogo faz de diferente</h2>
+          <hr class="rule max-w-sm">
+        </header>
+
+        <div class="grid lg:grid-cols-[1.4fr_1fr] gap-14 items-start">
+          <div class="reveal">
+            <p class="measure mb-6 text-lg">
+              Um livro é lido. Um filme é assistido. Um jogo é a única mídia que
+              <strong class="text-ink font-medium">não acontece sem você</strong> — nada avança até que
+              alguém decida agir, e cada partida vira uma história um pouco diferente.
+            </p>
+            <p class="measure text-muted mb-6">
+              Essa diferença muda tudo. Quando um personagem falha num filme, você assiste. Quando falha
+              num jogo, quem falhou foi você — e é você quem precisa entender o erro e tentar de novo.
+              Essa troca de lugar, de espectador para responsável, é o que dá aos jogos uma força de
+              aprendizado que as outras mídias não alcançam.
+            </p>
+            <p class="measure text-muted">
+              As cinco páginas deste projeto mostram cinco formas dessa mesma ideia: sobreviver, construir,
+              investigar, explorar e insistir.
+            </p>
+          </div>
+
+          <aside class="card p-8 reveal" style="--i:1">
+            <p class="t-label text-cyan mb-5">Os cinco mundos</p>
+            <ul class="space-y-4 text-sm">
+              <li class="flex gap-3">
+                <span class="w-1 rounded-full shrink-0" style="background:#8a9a5b"></span>
+                <span><strong class="text-ink font-medium">The Last of Us</strong><br>
+                  <span class="text-dim">sobreviver sem deixar de ser humano</span></span>
+              </li>
+              <li class="flex gap-3">
+                <span class="w-1 rounded-full shrink-0" style="background:#5db85d"></span>
+                <span><strong class="text-ink font-medium">Minecraft</strong><br>
+                  <span class="text-dim">construir sem que ninguém mande</span></span>
+              </li>
+              <li class="flex gap-3">
+                <span class="w-1 rounded-full shrink-0" style="background:#c81e2c"></span>
+                <span><strong class="text-ink font-medium">Batman: Arkham Knight</strong><br>
+                  <span class="text-dim">planejar antes de agir</span></span>
+              </li>
+              <li class="flex gap-3">
+                <span class="w-1 rounded-full shrink-0" style="background:#34d0d8"></span>
+                <span><strong class="text-ink font-medium">Subnautica 2</strong><br>
+                  <span class="text-dim">explorar o que assusta</span></span>
+              </li>
+              <li class="flex gap-3">
+                <span class="w-1 rounded-full shrink-0" style="background:#c9a227"></span>
+                <span><strong class="text-ink font-medium">Elden Ring</strong><br>
+                  <span class="text-dim">insistir depois de cair</span></span>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BENEFÍCIOS ============ -->
+    <section id="beneficios" class="py-24 md:py-36 bg-panel/40">
+      <div class="max-w-shell mx-auto px-5 sm:px-8">
+        <header class="mb-14 reveal">
+          <p class="t-label text-violet mb-4">02 — benefícios</p>
+          <h2 class="font-d t-h2 mb-6">O que se aprende jogando</h2>
+          <p class="lede measure">Cada habilidade abaixo aparece de forma concreta em um dos jogos que
+            este projeto cobre.</p>
+        </header>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="card p-8 reveal" style="--i:0">
+            <p class="font-d text-3xl mb-4" style="color:#c9a227">01</p>
+            <h3 class="font-d t-h3 mb-3">Persistência</h3>
+            <p class="text-sm text-muted">Em <strong class="text-ink font-medium">Elden Ring</strong>, falhar
+              não é punição: é o método. Cada derrota ensina o padrão do inimigo, e vencer significa ter
+              insistido depois de errar muitas vezes.</p>
+          </article>
+
+          <article class="card p-8 reveal" style="--i:1">
+            <p class="font-d text-3xl mb-4" style="color:#5db85d">02</p>
+            <h3 class="font-d t-h3 mb-3">Criatividade</h3>
+            <p class="text-sm text-muted">O <strong class="text-ink font-medium">Minecraft</strong> não impõe
+              objetivo. O jogador decide o que construir, e a única limitação real é a imaginação — o que
+              transforma o jogo numa oficina.</p>
+          </article>
+
+          <article class="card p-8 reveal" style="--i:2">
+            <p class="font-d text-3xl mb-4" style="color:#34d0d8">03</p>
+            <h3 class="font-d t-h3 mb-3">Curiosidade</h3>
+            <p class="text-sm text-muted">Em <strong class="text-ink font-medium">Subnautica</strong>, o
+              desconhecido é ao mesmo tempo o perigo e o prêmio. Avançar exige vencer o próprio receio para
+              descobrir o que há mais fundo.</p>
+          </article>
+
+          <article class="card p-8 reveal" style="--i:3">
+            <p class="font-d text-3xl mb-4" style="color:#c81e2c">04</p>
+            <h3 class="font-d t-h3 mb-3">Estratégia</h3>
+            <p class="text-sm text-muted">Em <strong class="text-ink font-medium">Batman: Arkham Knight</strong>,
+              entrar atirando é derrota certa. É preciso observar o ambiente, escolher a ordem dos alvos e agir
+              no momento certo.</p>
+          </article>
+
+          <article class="card p-8 reveal" style="--i:4">
+            <p class="font-d text-3xl mb-4" style="color:#8a9a5b">05</p>
+            <h3 class="font-d t-h3 mb-3">Empatia</h3>
+            <p class="text-sm text-muted">Em <strong class="text-ink font-medium">The Last of Us</strong>, o
+              jogo entrega o controle de personagens em lados opostos e obriga a entender a razão de cada um.
+              Difícil sair indiferente.</p>
+          </article>
+
+          <article class="card p-8 reveal" style="--i:5">
+            <p class="font-d text-3xl mb-4" style="color:#ffb347">06</p>
+            <h3 class="font-d t-h3 mb-3">E ainda</h3>
+            <p class="text-sm text-muted">Coordenação e tempo de reação, trabalho em equipe no modo
+              cooperativo, e o inglês que tanta gente acabou aprendendo por querer entender o que estava
+              acontecendo na tela.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VASTOS MUNDOS ============ -->
+    <section id="mundos" class="py-24 md:py-36">
+      <div class="max-w-shell mx-auto px-5 sm:px-8">
+        <header class="mb-14 reveal">
+          <p class="t-label text-violet mb-4">03 — escala</p>
+          <h2 class="font-d t-h2 mb-6">Mundos vastos demais<br>para uma vida só</h2>
+          <p class="lede measure">Alguns desses lugares são grandes a ponto de nenhum jogador ver tudo o
+            que existe neles.</p>
+        </header>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <article class="card overflow-hidden reveal">
+            <div class="media aspect-[4/3] scrim">
+              <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_c494372930ca791bdc6221eca134f2270fb2cb9f.1920x1080.jpg"
+                alt="Jogadores diante de um vale enorme tomado pela névoa em Elden Ring" loading="lazy">
+            </div>
+            <div class="p-7">
+              <h3 class="font-d t-h3 mb-2">Horizontes abertos</h3>
+              <p class="text-sm text-muted">Em mundos abertos, cada ponto visível no horizonte costuma ser um
+                lugar que dá para alcançar a pé. A vontade de ver o que tem lá é o que move o jogador.</p>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal" style="--i:1">
+            <div class="media aspect-[4/3] scrim">
+              <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1962700/library_hero.jpg"
+                alt="Mergulhadores explorando um oceano alienígena em Subnautica 2" loading="lazy">
+            </div>
+            <div class="p-7">
+              <h3 class="font-d t-h3 mb-2">Profundezas</h3>
+              <p class="text-sm text-muted">Nem todo mundo vasto é largo: alguns são fundos. Descer mais um
+                pouco significa menos luz, menos oxigênio e criaturas cada vez maiores.</p>
+            </div>
+          </article>
+
+          <article class="card overflow-hidden reveal" style="--i:2">
+            <div class="media aspect-[4/3] scrim">
+              <img src="img_otavio/inicio.png"
+                alt="Paisagem de blocos do Minecraft com personagens e animais" loading="lazy">
+            </div>
+            <div class="p-7">
+              <h3 class="font-d t-h3 mb-2">Mundos gerados</h3>
+              <p class="text-sm text-muted">O Minecraft cria o terreno por algoritmo, então cada mundo é novo.
+                Dois jogadores nunca começam exatamente na mesma paisagem.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HISTÓRIAS ============ -->
+    <section id="historias" class="py-24 md:py-36 bg-panel/40">
+      <div class="max-w-shell mx-auto px-5 sm:px-8">
+        <div class="grid lg:grid-cols-2 gap-14 items-center">
+          <div class="reveal">
+            <p class="t-label text-violet mb-4">04 — narrativa</p>
+            <h2 class="font-d t-h2 mb-6">Histórias que só<br>funcionam aqui</h2>
+            <p class="measure mb-5 text-lg">
+              Existe um tipo de história que nenhuma outra mídia consegue contar: aquela em que
+              <strong class="text-ink font-medium">a culpa é do público</strong>.
+            </p>
+            <p class="measure text-muted mb-5">
+              Quando um jogo faz você apertar o botão que decide o destino de alguém, o peso muda de lugar.
+              Não dá para dizer "o personagem fez" — foi você que fez. É por isso que finais de jogos
+              costumam ficar na cabeça de um jeito diferente.
+            </p>
+            <p class="measure text-muted">
+              E há histórias que nem são escritas: a lembrança da primeira casa construída no Minecraft ou
+              do chefe que levou trinta tentativas também é narrativa — só que criada por quem jogou.
+            </p>
+          </div>
+
+          <figure class="card overflow-hidden reveal" style="--i:1">
+            <div class="media aspect-[16/10] scrim">
+              <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1888930/library_hero_2x.jpg"
+                alt="Arte oficial de The Last of Us Part I com Ellie e Joel" loading="lazy">
+            </div>
+            <figcaption class="p-6 text-sm text-dim border-t border-linesoft">
+              The Last of Us é um dos exemplos mais citados de narrativa em jogos — e tem uma página inteira
+              dedicada a ele neste projeto.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AS PÁGINAS ============ -->
+    <section id="paginas" class="py-24 md:py-36">
+      <div class="max-w-shell mx-auto px-5 sm:px-8">
+        <header class="mb-14 reveal">
+          <p class="t-label text-violet mb-4">05 — o projeto</p>
+          <h2 class="font-d t-h2 mb-6">As cinco páginas</h2>
+          <p class="lede measure">Cada integrante escolheu um jogo, um tema visual e uma paleta própria, e
+            desenvolveu sua página em uma branch separada no GitHub.</p>
+        </header>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="paginasGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ COMO FOI FEITO ============ -->
+    <section id="projeto" class="py-24 md:py-36 bg-panel/40">
+      <div class="max-w-shell mx-auto px-5 sm:px-8">
+        <header class="mb-14 reveal">
+          <p class="t-label text-violet mb-4">06 — organização</p>
+          <h2 class="font-d t-h2 mb-6">Como o projeto foi construído</h2>
+          <p class="lede measure">O fluxo de trabalho seguiu a estrutura de branches do Git, do primeiro
+            commit até a reunião de tudo na <code class="text-cyan">main</code>.</p>
+        </header>
+
+        <ol class="space-y-0 max-w-4xl">
+          <li class="flex gap-6 md:gap-10 border-b border-linesoft py-7 reveal" style="--i:0">
+            <span class="font-d text-2xl text-dim w-10 shrink-0">01</span>
+            <div>
+              <h3 class="font-d t-h3 mb-2">Uma branch por página</h3>
+              <p class="text-sm text-muted">Cada integrante recebeu sua própria branch, para trabalhar sem
+                atrapalhar o código de ninguém.</p>
+            </div>
+          </li>
+          <li class="flex gap-6 md:gap-10 border-b border-linesoft py-7 reveal" style="--i:1">
+            <span class="font-d text-2xl text-dim w-10 shrink-0">02</span>
+            <div>
+              <h3 class="font-d t-h3 mb-2">Arquivos separados</h3>
+              <p class="text-sm text-muted">Cada página ficou em seus próprios arquivos de HTML, CSS e
+                JavaScript, mantendo a organização do repositório.</p>
+            </div>
+          </li>
+          <li class="flex gap-6 md:gap-10 border-b border-linesoft py-7 reveal" style="--i:2">
+            <span class="font-d text-2xl text-dim w-10 shrink-0">03</span>
+            <div>
+              <h3 class="font-d t-h3 mb-2">Liberdade visual</h3>
+              <p class="text-sm text-muted">Não houve padrão de estilo obrigatório: cada um definiu tema e
+                paleta conforme o jogo escolhido, o que explica a diversidade entre as páginas.</p>
+            </div>
+          </li>
+          <li class="flex gap-6 md:gap-10 border-b border-linesoft py-7 reveal" style="--i:3">
+            <span class="font-d text-2xl text-dim w-10 shrink-0">04</span>
+            <div>
+              <h3 class="font-d t-h3 mb-2">Merge na main</h3>
+              <p class="text-sm text-muted">Com as branches finalizadas, o líder fez o merge de cada uma na
+                <code class="text-cyan">main</code>, reunindo tudo em um único projeto navegável.</p>
+            </div>
+          </li>
+          <li class="flex gap-6 md:gap-10 py-7 reveal" style="--i:4">
+            <span class="font-d text-2xl text-dim w-10 shrink-0">05</span>
+            <div>
+              <h3 class="font-d t-h3 mb-2">Este hub</h3>
+              <p class="text-sm text-muted">A página inicial conecta todas as outras, permitindo navegar de
+                uma para qualquer outra.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ RODAPÉ ============ -->
+  <footer class="border-t border-line">
+    <div class="max-w-shell mx-auto px-5 sm:px-8 py-16 grid md:grid-cols-3 gap-12">
+      <div>
+        <p class="font-d text-lg mb-4">Mundos<span class="grad">Jogáveis</span></p>
+        <p class="text-sm text-dim measure-sm">
+          Projeto escolar sobre criação de sites em nuvem com GitHub. Artes e capturas exibidas via Steam,
+          pertencentes a seus respectivos criadores, usadas apenas para fins ilustrativos e educacionais.
+        </p>
+      </div>
+
+      <nav aria-label="Páginas do projeto">
+        <h2 class="t-label text-muted mb-4">Páginas</h2>
+        <ul class="space-y-2 text-sm">
+          <li><a href="laura.html" class="text-dim hover:text-ink transition-colors">The Last of Us</a></li>
+          <li><a href="otavio.html" class="text-dim hover:text-ink transition-colors">Minecraft</a></li>
+          <li><a href="apolo.html" class="text-dim hover:text-ink transition-colors">Batman: Arkham Knight</a></li>
+          <li><a href="davi.html" class="text-dim hover:text-ink transition-colors">Subnautica 2</a></li>
+          <li><a href="pablo.html" class="text-dim hover:text-ink transition-colors">Elden Ring</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Seções">
+        <h2 class="t-label text-muted mb-4">Seções</h2>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#sobre" class="text-dim hover:text-ink transition-colors">Sobre o meio</a></li>
+          <li><a href="#beneficios" class="text-dim hover:text-ink transition-colors">Benefícios</a></li>
+          <li><a href="#mundos" class="text-dim hover:text-ink transition-colors">Vastos mundos</a></li>
+          <li><a href="#historias" class="text-dim hover:text-ink transition-colors">Histórias</a></li>
+          <li><a href="#projeto" class="text-dim hover:text-ink transition-colors">Como foi feito</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="border-t border-linesoft">
+      <p class="max-w-shell mx-auto px-5 sm:px-8 py-6 t-label text-dim text-center">
+        &copy; <span id="ano"></span> — projeto de sites em nuvem
+      </p>
+    </div>
+  </footer>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
